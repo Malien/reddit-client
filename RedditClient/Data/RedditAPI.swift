@@ -97,36 +97,6 @@ struct RedditAPI {
         let children: [Kinded<T>]
     }
 
-    /// This a collection of image properties transfered from an API
-    struct Image: Codable {
-        let id: String
-        let source: Source
-        let resolutions: [Source]
-        /// Theese are usually only set on nsfw images, and typically are blured versions of the original image
-        let variants: Variants
-
-        struct Source: Codable {
-            let url: URL
-            let width: Int
-            let height: Int
-        }
-
-        struct Variants: Codable {
-            let obfuscated: CoreImage?
-            let nsfw: CoreImage?
-        }
-
-        struct CoreImage: Codable {
-            let source: Source
-            let resolutions: [Source]
-        }
-    }
-
-    struct Preview: Codable {
-        let images: [Image]
-        let enabled: Bool
-    }
-
     // MARK: Actual implementation
 
     public static let redditBaseURL = URL(staticString: "https://www.reddit.com/")
