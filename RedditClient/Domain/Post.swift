@@ -27,8 +27,6 @@ struct Post: RedditEntity, Identifiable {
     
     let createdEpoch: TimeInterval
     let createdUTCEpoch: TimeInterval
-    lazy var created = Date.init(timeIntervalSince1970: createdEpoch)
-    lazy var createdUTC = Date.init(timeIntervalSince1970: createdUTCEpoch)
     
     /// If link is promotional, author is set to `nil`
     let author: String?
