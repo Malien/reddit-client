@@ -28,3 +28,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
 }
+
+extension UIView {
+    @discardableResult
+    func autolayouted() -> Self {
+        translatesAutoresizingMaskIntoConstraints = false
+        return self
+    }
+}

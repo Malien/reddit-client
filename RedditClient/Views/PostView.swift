@@ -7,87 +7,66 @@
 //
 
 import UIKit
-
-extension UIView {
-    @discardableResult
-    func autolayouted() -> Self {
-        translatesAutoresizingMaskIntoConstraints = false
-        return self
-    }
-}
+import SDWebImage
 
 class PostView : UIView {
     
-    let username = UILabel().autolayouted()
-    let timestamp = UILabel().autolayouted()
-    let subreddit = UILabel().autolayouted()
-    let title = UILabel().autolayouted()
-    
+    let header: PostHeaderView
+    // TODO: Come up with declarative way of handling appearing and disappearing views
+    let thumbnail = UIImageView().autolayouted()
+    var thumbnailHeightConstraint: NSLayoutConstraint
+
     init(post: Post) {
+        header = PostHeaderView(post: post).autolayouted()
+        thumbnailHeightConstraint = NSLayoutConstraint(item: thumbnail, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant: 0)
         super.init(frame: CGRect.zero)
 
         populate(dataFrom: post)
         
-        title.numberOfLines = 3
-        
-        func makeDot() -> UILabel {
-            let dot = UILabel().autolayouted()
-            dot.text = "•"
-            return dot
-        }
-        
-        let dot1 = makeDot()
-        let dot2 = makeDot()
-
-        let header = UIView().autolayouted()
-        header.layoutMargins = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
-        header.addSubview(username)
-        header.addSubview(dot1)
-        header.addSubview(timestamp)
-        header.addSubview(dot2)
-        header.addSubview(subreddit)
-        header.addSubview(title)
-
-        self.addSubview(header)
+        addSubview(header)
+        addSubview(thumbnail)
 
         NSLayoutConstraint.activate([
-            // Username in header
-            NSLayoutConstraint(item: username, attribute: .leading, relatedBy: .equal, toItem: header, attribute: .leadingMargin, multiplier: 1, constant: 0),
-            NSLayoutConstraint(item: username, attribute: .top    , relatedBy: .equal, toItem: header, attribute: .topMargin    , multiplier: 1, constant: 0),
-            // Dot in header
-            NSLayoutConstraint(item: dot1, attribute: .leading, relatedBy: .equal, toItem: username, attribute: .trailing, multiplier: 1, constant: 5),
-            NSLayoutConstraint(item: dot1, attribute: .centerY, relatedBy: .equal, toItem: username, attribute: .centerY , multiplier: 1, constant: 0),
-            // Timestamp in header
-            NSLayoutConstraint(item: timestamp, attribute: .leading, relatedBy: .equal, toItem: dot1, attribute: .trailing, multiplier: 1, constant: 10),
-            NSLayoutConstraint(item: timestamp, attribute: .centerY, relatedBy: .equal, toItem: dot1, attribute: .centerY , multiplier: 1, constant: 0),
-            // Dot in header
-            NSLayoutConstraint(item: dot2, attribute: .leading, relatedBy: .equal, toItem: timestamp, attribute: .trailing, multiplier: 1, constant: 5),
-            NSLayoutConstraint(item: dot2, attribute: .centerY, relatedBy: .equal, toItem: timestamp, attribute: .centerY , multiplier: 1, constant: 0),
-            // Subreddit in header
-            NSLayoutConstraint(item: subreddit, attribute: .leading, relatedBy: .equal, toItem: dot2, attribute: .trailing, multiplier: 1, constant: 5),
-            NSLayoutConstraint(item: subreddit, attribute: .centerY, relatedBy: .equal, toItem: dot2, attribute: .centerY , multiplier: 1, constant: 0),
-            // Post title in header
-            NSLayoutConstraint(item: title, attribute: .top     , relatedBy: .equal, toItem: username, attribute: .bottom        , multiplier: 1, constant: 0),
-            NSLayoutConstraint(item: title, attribute: .trailing, relatedBy: .equal, toItem: header  , attribute: .trailingMargin, multiplier: 1, constant: 0),
-            NSLayoutConstraint(item: title, attribute: .leading , relatedBy: .equal, toItem: header  , attribute: .leadingMargin , multiplier: 1, constant: 0),
             // Header in view
             NSLayoutConstraint(item: header, attribute: .leading , relatedBy: .equal, toItem: self , attribute: .leading , multiplier: 1, constant: 0),
             NSLayoutConstraint(item: header, attribute: .top     , relatedBy: .equal, toItem: self , attribute: .top     , multiplier: 1, constant: 0),
             NSLayoutConstraint(item: header, attribute: .trailing, relatedBy: .equal, toItem: self , attribute: .trailing, multiplier: 1, constant: 0),
-            NSLayoutConstraint(item: header, attribute: .bottom  , relatedBy: .equal, toItem: title, attribute: .bottom  , multiplier: 1, constant: 0),
+            // Thumbnail in view
+            NSLayoutConstraint(item: thumbnail, attribute: .top     , relatedBy: .equal, toItem: header, attribute: .bottom  , multiplier: 1, constant: 0),
+            NSLayoutConstraint(item: thumbnail, attribute: .leading , relatedBy: .equal, toItem: self  , attribute: .leading , multiplier: 1, constant: 0),
+            NSLayoutConstraint(item: thumbnail, attribute: .trailing, relatedBy: .equal, toItem: self  , attribute: .trailing, multiplier: 1, constant: 0),
+            thumbnailHeightConstraint,
             // View size
-            NSLayoutConstraint(item: self, attribute: .bottom, relatedBy: .equal, toItem: header, attribute: .bottom, multiplier: 1, constant: 0),
+            NSLayoutConstraint(item: self, attribute: .bottom, relatedBy: .equal, toItem: thumbnail, attribute: .bottom, multiplier: 1, constant: 0),
         ])
     }
     
     public func populate(dataFrom post: Post) {
-        username.text = "u/\(post.author ?? "promotion")"
-        timestamp.text = post.userReadableTimeDiff
-        subreddit.text = "r/\(post.subreddit)"
-        title.text = post.title
+        header.populate(dataFrom: post)
+        if let preview = post.preview, let image = preview.images.first {
+            thumbnail.sd_setImage(with: image.source.url) { [weak self] (_, _, _, _) in
+                guard let self = self else { return }
+                let multiplier = CGFloat(image.source.height) / CGFloat(image.source.width)
+                self.thumbnailHeightConstraint.isActive = false
+                self.thumbnailHeightConstraint = NSLayoutConstraint(
+                    item: self.thumbnail,
+                    attribute: .height,
+                    relatedBy: .equal,
+                    toItem: self.thumbnail,
+                    attribute: .width,
+                    multiplier: multiplier,
+                    constant: 0
+                )
+                self.thumbnailHeightConstraint.isActive = true
+            }
+        } else {
+            thumbnail.image = nil
+        }
     }
     
     required init?(coder: NSCoder) {
+        header = PostHeaderView(coder: coder)!
+        thumbnailHeightConstraint = NSLayoutConstraint(item: thumbnail, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant: 0)
         super.init(coder: coder)
     }
     

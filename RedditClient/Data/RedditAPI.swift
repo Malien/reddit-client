@@ -136,6 +136,9 @@ struct RedditAPI {
         from components: URLComponents,
         completionHandler: @escaping CompletionHandler<T>
     ) -> Cancellable? {
+        var components = components
+        components.queryItems = components.queryItems ?? []
+        components.queryItems!.append(URLQueryItem(name: "raw_json", value: "1"))
         guard let url = components.url(relativeTo: baseURL) else {
             completionHandler(.failure(.invalidURL))
             return nil

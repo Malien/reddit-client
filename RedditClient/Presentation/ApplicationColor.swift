@@ -15,9 +15,7 @@ extension UIColor {
         }
         return color
     }
-}
-
-enum ApplicationColor {
+    
     static let background = UIColor.fromCatalog(named: "color.background")
     static let accent = UIColor.fromCatalog(named: "color.accent")
     static let upvote = UIColor.fromCatalog(named: "color.upvote")

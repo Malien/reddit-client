@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -30,6 +30,9 @@
 		C48C9C57254A1707007EB11A /* PostPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48C9C56254A1707007EB11A /* PostPresentation.swift */; };
 		C4DDFCB4254F034E0099BFA6 /* ApplicationColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DDFCB3254F034E0099BFA6 /* ApplicationColor.swift */; };
 		C4DDFCB6254F05C10099BFA6 /* ApplicationIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DDFCB5254F05C10099BFA6 /* ApplicationIcon.swift */; };
+		C4DDFCB8254F064A0099BFA6 /* PostHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DDFCB7254F064A0099BFA6 /* PostHeaderView.swift */; };
+		C4DDFCBA254F10EB0099BFA6 /* ApplicationFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DDFCB9254F10EA0099BFA6 /* ApplicationFont.swift */; };
+		C4DDFCBD254F15930099BFA6 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = C4DDFCBC254F15930099BFA6 /* SDWebImage */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,6 +82,8 @@
 		C48C9C56254A1707007EB11A /* PostPresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostPresentation.swift; sourceTree = "<group>"; };
 		C4DDFCB3254F034E0099BFA6 /* ApplicationColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationColor.swift; sourceTree = "<group>"; };
 		C4DDFCB5254F05C10099BFA6 /* ApplicationIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationIcon.swift; sourceTree = "<group>"; };
+		C4DDFCB7254F064A0099BFA6 /* PostHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostHeaderView.swift; sourceTree = "<group>"; };
+		C4DDFCB9254F10EA0099BFA6 /* ApplicationFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationFont.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +91,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C4DDFCBD254F15930099BFA6 /* SDWebImage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -192,6 +198,7 @@
 				C48C9C56254A1707007EB11A /* PostPresentation.swift */,
 				C4DDFCB3254F034E0099BFA6 /* ApplicationColor.swift */,
 				C4DDFCB5254F05C10099BFA6 /* ApplicationIcon.swift */,
+				C4DDFCB9254F10EA0099BFA6 /* ApplicationFont.swift */,
 			);
 			path = Presentation;
 			sourceTree = "<group>";
@@ -201,6 +208,7 @@
 			children = (
 				C4563CEC2549F18400FAB781 /* SinglePostViewController.swift */,
 				C4563D422549FBFB00FAB781 /* PostView.swift */,
+				C4DDFCB7254F064A0099BFA6 /* PostHeaderView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -221,6 +229,9 @@
 			dependencies = (
 			);
 			name = RedditClient;
+			packageProductDependencies = (
+				C4DDFCBC254F15930099BFA6 /* SDWebImage */,
+			);
 			productName = RedditClient;
 			productReference = C4563CE52549F18400FAB781 /* Reddit.app */;
 			productType = "com.apple.product-type.application";
@@ -293,6 +304,9 @@
 				Base,
 			);
 			mainGroup = C4563CDC2549F18300FAB781;
+			packageReferences = (
+				C4DDFCBB254F15920099BFA6 /* XCRemoteSwiftPackageReference "SDWebImage" */,
+			);
 			productRefGroup = C4563CE62549F18400FAB781 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -336,6 +350,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C4563D2A2549F23B00FAB781 /* ApplicationStore.swift in Sources */,
+				C4DDFCB8254F064A0099BFA6 /* PostHeaderView.swift in Sources */,
 				C4563D272549F23B00FAB781 /* RedditAPI.swift in Sources */,
 				C4563D3D2549FA7F00FAB781 /* RedditEntity.swift in Sources */,
 				C4563D292549F23B00FAB781 /* RedditService.swift in Sources */,
@@ -351,6 +366,7 @@
 				C4563D432549FBFB00FAB781 /* PostView.swift in Sources */,
 				C4563D262549F23B00FAB781 /* PostID.swift in Sources */,
 				C4563D392549F9A400FAB781 /* ImageDescription.swift in Sources */,
+				C4DDFCBA254F10EB0099BFA6 /* ApplicationFont.swift in Sources */,
 				C4563D332549F7F600FAB781 /* Thumbnail.swift in Sources */,
 				C4563D2B2549F23B00FAB781 /* ThreadSafe.swift in Sources */,
 				C4563D352549F82600FAB781 /* Vote.swift in Sources */,
@@ -678,6 +694,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		C4DDFCBB254F15920099BFA6 /* XCRemoteSwiftPackageReference "SDWebImage" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImage.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.9.4;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		C4DDFCBC254F15930099BFA6 /* SDWebImage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C4DDFCBB254F15920099BFA6 /* XCRemoteSwiftPackageReference "SDWebImage" */;
+			productName = SDWebImage;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = C4563CDD2549F18300FAB781 /* Project object */;
 }
