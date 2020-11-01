@@ -33,6 +33,7 @@
 		C4DDFCB8254F064A0099BFA6 /* PostHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DDFCB7254F064A0099BFA6 /* PostHeaderView.swift */; };
 		C4DDFCBA254F10EB0099BFA6 /* ApplicationFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DDFCB9254F10EA0099BFA6 /* ApplicationFont.swift */; };
 		C4DDFCBD254F15930099BFA6 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = C4DDFCBC254F15930099BFA6 /* SDWebImage */; };
+		C4DDFCBF254F52F70099BFA6 /* BookmarkButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DDFCBE254F52F60099BFA6 /* BookmarkButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -84,6 +85,7 @@
 		C4DDFCB5254F05C10099BFA6 /* ApplicationIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationIcon.swift; sourceTree = "<group>"; };
 		C4DDFCB7254F064A0099BFA6 /* PostHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostHeaderView.swift; sourceTree = "<group>"; };
 		C4DDFCB9254F10EA0099BFA6 /* ApplicationFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationFont.swift; sourceTree = "<group>"; };
+		C4DDFCBE254F52F60099BFA6 /* BookmarkButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -209,6 +211,7 @@
 				C4563CEC2549F18400FAB781 /* SinglePostViewController.swift */,
 				C4563D422549FBFB00FAB781 /* PostView.swift */,
 				C4DDFCB7254F064A0099BFA6 /* PostHeaderView.swift */,
+				C4DDFCBE254F52F60099BFA6 /* BookmarkButton.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -361,6 +364,7 @@
 				C4563D242549F23B00FAB781 /* RedditRepository.swift in Sources */,
 				C4563CED2549F18400FAB781 /* SinglePostViewController.swift in Sources */,
 				C4563CE92549F18400FAB781 /* AppDelegate.swift in Sources */,
+				C4DDFCBF254F52F70099BFA6 /* BookmarkButton.swift in Sources */,
 				C4563D252549F23B00FAB781 /* Cache.swift in Sources */,
 				C4DDFCB6254F05C10099BFA6 /* ApplicationIcon.swift in Sources */,
 				C4563D432549FBFB00FAB781 /* PostView.swift in Sources */,

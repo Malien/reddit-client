@@ -8,7 +8,7 @@ import Foundation
 
     var wrappedValue: T {
         get {
-            return queue.sync { value }
+            queue.sync { value }
         }
         set {
             queue.async { self.value = newValue }

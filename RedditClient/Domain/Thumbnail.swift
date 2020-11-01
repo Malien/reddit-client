@@ -33,7 +33,7 @@ extension Thumbnail: Codable {
     init(from decoder: Decoder) throws {
         let value = try decoder.singleValueContainer().decode(String.self)
         switch value {
-        case "self": self = .`self`
+        case "self", "": self = .`self`
         case "image": self = .image
         case "nsfw": self = .nsfw
         case "default": self = .`default`

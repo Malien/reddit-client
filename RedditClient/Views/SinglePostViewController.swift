@@ -14,6 +14,7 @@ class SinglePostViewController: UIViewController {
     var postView: PostView? = nil
     var subscription: SubscriptionHolder?
     let scroll = UIScrollView().autolayouted()
+    var bookmarked = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,12 +30,12 @@ class SinglePostViewController: UIViewController {
             NSLayoutConstraint(item: scroll, attribute: .bottom, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 1, constant: 0)
         ])
 
-        subscription = reddit.topPosts(from: "ios", limit: 1) { [weak self] result in
+        subscription = reddit.topPosts(from: "AskMen", limit: 1) { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success(let posts):
                 if let post = posts.first {
-                    self.onData(of: post)
+                    self.onData(ofPost: post)
                 } else {
                     print("No posts")
                 }
@@ -44,13 +45,25 @@ class SinglePostViewController: UIViewController {
         }
     }
     
-    private func onData(of post: Post) {
+    private func onData(ofBookmark bookmark: Bool) {
+        $postView.mutate { [weak self] postView in
+            guard let self = self else { return }
+            self.bookmarked = bookmark
+            guard let postView = postView else { return }
+            postView.populate(bookmarked: bookmark)
+        }
+    }
+    
+    private func onData(ofPost post: Post) {
         $postView.mutate { [weak self] postView in
             guard let self = self else { return }
             if let postView = postView {
-                postView.populate(dataFrom: post)
+                postView.populate(post: post)
             } else {
-                let newPostView = PostView(post: post)
+                let newPostView = PostView(post: post, bookmarked: self.bookmarked, onBookmark: { [weak self] in
+                    guard let self = self else { return }
+                    self.onData(ofBookmark: !self.bookmarked)
+                })
                 self.scroll.addSubview(newPostView)
                 
                 newPostView.autolayouted()

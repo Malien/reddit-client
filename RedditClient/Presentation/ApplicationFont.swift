@@ -11,4 +11,5 @@ import UIKit
 extension UIFont {
     static let defaultText = UIFont.systemFont(ofSize: 18)
     static let title = UIFont.systemFont(ofSize: 22)
+    static let bigger = UIFont.systemFont(ofSize: 20)
 }
