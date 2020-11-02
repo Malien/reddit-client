@@ -28,12 +28,16 @@
 		C4563D3F2549FABB00FAB781 /* PostPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4563D3E2549FABB00FAB781 /* PostPreview.swift */; };
 		C4563D432549FBFB00FAB781 /* PostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4563D422549FBFB00FAB781 /* PostView.swift */; };
 		C48C9C57254A1707007EB11A /* PostPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48C9C56254A1707007EB11A /* PostPresentation.swift */; };
+		C48D8F6C255079B9004742FA /* formatCount.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48D8F6B255079B9004742FA /* formatCount.swift */; };
 		C4DDFCB4254F034E0099BFA6 /* ApplicationColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DDFCB3254F034E0099BFA6 /* ApplicationColor.swift */; };
 		C4DDFCB6254F05C10099BFA6 /* ApplicationIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DDFCB5254F05C10099BFA6 /* ApplicationIcon.swift */; };
 		C4DDFCB8254F064A0099BFA6 /* PostHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DDFCB7254F064A0099BFA6 /* PostHeaderView.swift */; };
 		C4DDFCBA254F10EB0099BFA6 /* ApplicationFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DDFCB9254F10EA0099BFA6 /* ApplicationFont.swift */; };
 		C4DDFCBD254F15930099BFA6 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = C4DDFCBC254F15930099BFA6 /* SDWebImage */; };
 		C4DDFCBF254F52F70099BFA6 /* BookmarkButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DDFCBE254F52F60099BFA6 /* BookmarkButton.swift */; };
+		C4DDFCC1254F64CD0099BFA6 /* PostInteractionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DDFCC0254F64CC0099BFA6 /* PostInteractionsView.swift */; };
+		C4DDFCC3254F682E0099BFA6 /* UpvoteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DDFCC2254F682E0099BFA6 /* UpvoteView.swift */; };
+		C4DDFCC7254F6C9A0099BFA6 /* LabeledButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DDFCC6254F6C9A0099BFA6 /* LabeledButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,11 +85,15 @@
 		C4563D3E2549FABB00FAB781 /* PostPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostPreview.swift; sourceTree = "<group>"; };
 		C4563D422549FBFB00FAB781 /* PostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostView.swift; sourceTree = "<group>"; };
 		C48C9C56254A1707007EB11A /* PostPresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostPresentation.swift; sourceTree = "<group>"; };
+		C48D8F6B255079B9004742FA /* formatCount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = formatCount.swift; sourceTree = "<group>"; };
 		C4DDFCB3254F034E0099BFA6 /* ApplicationColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationColor.swift; sourceTree = "<group>"; };
 		C4DDFCB5254F05C10099BFA6 /* ApplicationIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationIcon.swift; sourceTree = "<group>"; };
 		C4DDFCB7254F064A0099BFA6 /* PostHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostHeaderView.swift; sourceTree = "<group>"; };
 		C4DDFCB9254F10EA0099BFA6 /* ApplicationFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationFont.swift; sourceTree = "<group>"; };
 		C4DDFCBE254F52F60099BFA6 /* BookmarkButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkButton.swift; sourceTree = "<group>"; };
+		C4DDFCC0254F64CC0099BFA6 /* PostInteractionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostInteractionsView.swift; sourceTree = "<group>"; };
+		C4DDFCC2254F682E0099BFA6 /* UpvoteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpvoteView.swift; sourceTree = "<group>"; };
+		C4DDFCC6254F6C9A0099BFA6 /* LabeledButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabeledButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -201,6 +209,7 @@
 				C4DDFCB3254F034E0099BFA6 /* ApplicationColor.swift */,
 				C4DDFCB5254F05C10099BFA6 /* ApplicationIcon.swift */,
 				C4DDFCB9254F10EA0099BFA6 /* ApplicationFont.swift */,
+				C48D8F6B255079B9004742FA /* formatCount.swift */,
 			);
 			path = Presentation;
 			sourceTree = "<group>";
@@ -212,6 +221,9 @@
 				C4563D422549FBFB00FAB781 /* PostView.swift */,
 				C4DDFCB7254F064A0099BFA6 /* PostHeaderView.swift */,
 				C4DDFCBE254F52F60099BFA6 /* BookmarkButton.swift */,
+				C4DDFCC0254F64CC0099BFA6 /* PostInteractionsView.swift */,
+				C4DDFCC2254F682E0099BFA6 /* UpvoteView.swift */,
+				C4DDFCC6254F6C9A0099BFA6 /* LabeledButton.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -353,6 +365,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C4563D2A2549F23B00FAB781 /* ApplicationStore.swift in Sources */,
+				C4DDFCC3254F682E0099BFA6 /* UpvoteView.swift in Sources */,
 				C4DDFCB8254F064A0099BFA6 /* PostHeaderView.swift in Sources */,
 				C4563D272549F23B00FAB781 /* RedditAPI.swift in Sources */,
 				C4563D3D2549FA7F00FAB781 /* RedditEntity.swift in Sources */,
@@ -364,7 +377,9 @@
 				C4563D242549F23B00FAB781 /* RedditRepository.swift in Sources */,
 				C4563CED2549F18400FAB781 /* SinglePostViewController.swift in Sources */,
 				C4563CE92549F18400FAB781 /* AppDelegate.swift in Sources */,
+				C4DDFCC1254F64CD0099BFA6 /* PostInteractionsView.swift in Sources */,
 				C4DDFCBF254F52F70099BFA6 /* BookmarkButton.swift in Sources */,
+				C48D8F6C255079B9004742FA /* formatCount.swift in Sources */,
 				C4563D252549F23B00FAB781 /* Cache.swift in Sources */,
 				C4DDFCB6254F05C10099BFA6 /* ApplicationIcon.swift in Sources */,
 				C4563D432549FBFB00FAB781 /* PostView.swift in Sources */,
@@ -373,6 +388,7 @@
 				C4DDFCBA254F10EB0099BFA6 /* ApplicationFont.swift in Sources */,
 				C4563D332549F7F600FAB781 /* Thumbnail.swift in Sources */,
 				C4563D2B2549F23B00FAB781 /* ThreadSafe.swift in Sources */,
+				C4DDFCC7254F6C9A0099BFA6 /* LabeledButton.swift in Sources */,
 				C4563D352549F82600FAB781 /* Vote.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -11,17 +11,19 @@ import SDWebImage
 
 class PostView : UIView {
     
-    let header: PostHeaderView
+    private let header: PostHeaderView
     // TODO: Come up with declarative way of handling appearing and disappearing views
-    let thumbnail = UIImageView().autolayouted()
-    var thumbnailHeightConstraint: NSLayoutConstraint
-    let selftext = UILabel().autolayouted()
-    let bookmarkButton: BookmarkButton
+    private let thumbnail = UIImageView().autolayouted()
+    private var thumbnailHeightConstraint: NSLayoutConstraint
+    private let selftext = UILabel().autolayouted()
+    private let bookmarkButton: BookmarkButton
+    private let interactionsView: PostInteractionsView
 
     init(post: Post, bookmarked: Bool = false, onBookmark: @escaping () -> Void) {
         header = PostHeaderView(post: post).autolayouted()
         thumbnailHeightConstraint = NSLayoutConstraint(item: thumbnail, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant: 0)
         bookmarkButton = BookmarkButton(bookmarked: bookmarked, onClick: onBookmark).autolayouted()
+        interactionsView = PostInteractionsView(votes: post.score).autolayouted()
         super.init(frame: CGRect.zero)
 
         populate(post: post)
@@ -37,6 +39,7 @@ class PostView : UIView {
         addSubview(header)
         addSubview(thumbnail)
         addSubview(bookmarkButton)
+        addSubview(interactionsView)
 
         NSLayoutConstraint.activate([
             // Header in view
@@ -56,8 +59,12 @@ class PostView : UIView {
             NSLayoutConstraint(item: bookmarkButton, attribute: .top     , relatedBy: .equal, toItem: selftext, attribute: .bottom        , multiplier: 1, constant: 8),
             NSLayoutConstraint(item: bookmarkButton, attribute: .leading , relatedBy: .equal, toItem: self    , attribute: .leadingMargin , multiplier: 1, constant: 0),
             NSLayoutConstraint(item: bookmarkButton, attribute: .trailing, relatedBy: .equal, toItem: self    , attribute: .trailingMargin, multiplier: 1, constant: 0),
+            // Interactions in view
+            NSLayoutConstraint(item: interactionsView, attribute: .top     , relatedBy: .equal, toItem: bookmarkButton, attribute: .bottom  , multiplier: 1, constant: 8),
+            NSLayoutConstraint(item: interactionsView, attribute: .leading , relatedBy: .equal, toItem: self          , attribute: .leading , multiplier: 1, constant: 0),
+            NSLayoutConstraint(item: interactionsView, attribute: .trailing, relatedBy: .equal, toItem: self          , attribute: .trailing, multiplier: 1, constant: 0),
             // View size
-            NSLayoutConstraint(item: self, attribute: .bottomMargin, relatedBy: .equal, toItem: bookmarkButton, attribute: .bottom, multiplier: 1, constant: 0),
+            NSLayoutConstraint(item: self, attribute: .bottomMargin, relatedBy: .equal, toItem: interactionsView, attribute: .bottom, multiplier: 1, constant: 0),
         ])
     }
     
@@ -68,6 +75,7 @@ class PostView : UIView {
     public func populate(post: Post) {
         header.populate(dataFrom: post)
         selftext.text = post.selfText
+        interactionsView.populate(votes: post.score)
         if let preview = post.preview, let image = preview.images.first {
             thumbnail.sd_setImage(with: image.source.url) { [weak self] (_, _, _, _) in
                 guard let self = self else { return }

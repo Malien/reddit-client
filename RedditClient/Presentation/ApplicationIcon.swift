@@ -15,9 +15,21 @@ extension UIImage {
         }
         return image
     }
+    
+    static func applicationIcon(named: StaticString) -> UIImage {
+        guard let image = UIImage(named: "icon.\(named)") else {
+            preconditionFailure("No image \(named) found in asset catalog")
+        }
+        return image.withRenderingMode(.alwaysTemplate)
+    }
 }
 
 enum ApplicationIcon {
-    static let bookmarkFilled = UIImage.fromCatalog(named: "icon.bookmark.fill").withRenderingMode(.alwaysTemplate)
-    static let bookmarkOutlined = UIImage.fromCatalog(named: "icon.bookmark.outline")
+    static let bookmarkFilled = UIImage.applicationIcon(named: "bookmark.fill")
+    static let bookmarkOutlined = UIImage.applicationIcon(named: "bookmark.outline")
+    static let comments = UIImage.applicationIcon(named: "bauble")
+    static let share = UIImage.applicationIcon(named: "share")
+    static let upvote = UIImage.applicationIcon(named: "upvote")
+    static let downvote = UIImage.applicationIcon(named: "downvote")
+    static let novote = UIImage.applicationIcon(named: "novote")
 }

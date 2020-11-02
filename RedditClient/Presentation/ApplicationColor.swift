@@ -16,10 +16,17 @@ extension UIColor {
         return color
     }
     
-    static let background = UIColor.fromCatalog(named: "color.background")
-    static let accent = UIColor.fromCatalog(named: "color.accent")
-    static let upvote = UIColor.fromCatalog(named: "color.upvote")
-    static let downvote = UIColor.fromCatalog(named: "color.downvote")
-    static let text = UIColor.fromCatalog(named: "color.text")
-    static let subtext = UIColor.fromCatalog(named: "color.subtext")
+    static func applicationColor(named: StaticString) -> UIColor {
+        guard let color = UIColor(named: "color.\(named)") else {
+            preconditionFailure("Color \(named) is not found in the asset catalogue")
+        }
+        return color
+    }
+    
+    static let background = UIColor.applicationColor(named: "background")
+    static let accent = UIColor.applicationColor(named: "accent")
+    static let upvote = UIColor.applicationColor(named: "upvote")
+    static let downvote = UIColor.applicationColor(named: "downvote")
+    static let text = UIColor.applicationColor(named: "text")
+    static let subtext = UIColor.applicationColor(named: "subtext")
 }

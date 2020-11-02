@@ -24,13 +24,13 @@ class SinglePostViewController: UIViewController {
         view.addSubview(scroll)
 
         NSLayoutConstraint.activate([
-            NSLayoutConstraint(item: scroll, attribute: .leading, relatedBy: .equal, toItem: view, attribute: .leading, multiplier: 1, constant: 0),
+            NSLayoutConstraint(item: scroll, attribute: .leading , relatedBy: .equal, toItem: view, attribute: .leading , multiplier: 1, constant: 0),
             NSLayoutConstraint(item: scroll, attribute: .trailing, relatedBy: .equal, toItem: view, attribute: .trailing, multiplier: 1, constant: 0),
-            NSLayoutConstraint(item: scroll, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1, constant: 20),
-            NSLayoutConstraint(item: scroll, attribute: .bottom, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 1, constant: 0)
+            NSLayoutConstraint(item: scroll, attribute: .top     , relatedBy: .equal, toItem: view, attribute: .top     , multiplier: 1, constant: 20),
+            NSLayoutConstraint(item: scroll, attribute: .bottom  , relatedBy: .equal, toItem: view, attribute: .bottom  , multiplier: 1, constant: 0)
         ])
 
-        subscription = reddit.topPosts(from: "AskMen", limit: 1) { [weak self] result in
+        subscription = reddit.topPosts(from: "ios", limit: 1) { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success(let posts):
