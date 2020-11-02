@@ -4,6 +4,16 @@ protocol SubscriptionHolder {
     mutating func unsubscribe()
 }
 
+extension Array {
+    mutating func mutateEach(by transform: (inout Element) throws -> Void) rethrows {
+        self = try map { el in
+            var el = el
+            try transform(&el)
+            return el
+        }
+     }
+}
+
 final class RedditRepository {
     let service: RedditService
     let store: ApplicationStore
@@ -18,9 +28,11 @@ final class RedditRepository {
         let subscription: Cache<Key, Value>.SubscriptionID
         private(set) var store: ApplicationStore
         let cache: WritableKeyPath<ApplicationStore, Cache<Key, Value>>
+        private(set) var cancellations: [Cancellable]
 
         mutating func unsubscribe() {
             store[keyPath: cache].unsubscribe(from: request, subscription: subscription)
+            cancellations.mutateEach { $0.cancel() }
         }
     }
 
@@ -43,19 +55,21 @@ final class RedditRepository {
                 break
             }
         }
+        
+        var cancellations: [Cancellable] = []
 
         if let items = store.subredditTopPosts[request] {
             dataStream(.success(items))
             if force {
-                service.fetchTopPosts(request: request) { dataStream(.failure($0)) }
+                cancellations.append(service.fetchTopPosts(request: request) { dataStream(.failure($0)) })
             }
         } else {
-            service.fetchTopPosts(request: request) { dataStream(.failure($0)) }
+            cancellations.append(service.fetchTopPosts(request: request) { dataStream(.failure($0)) })
         }
 
         return Subscription(
             request: request, subscription: subscription, store: store,
-            cache: \ApplicationStore.subredditTopPosts)
+            cache: \ApplicationStore.subredditTopPosts, cancellations: cancellations)
     }
 
 }

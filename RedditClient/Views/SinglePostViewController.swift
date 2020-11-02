@@ -15,34 +15,27 @@ class SinglePostViewController: UIViewController {
     var subscription: SubscriptionHolder?
     let scroll = UIScrollView().autolayouted()
     var bookmarked = false
-
+    
+    var viewModel: SinglePostViewModel? = nil
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         view.autolayouted()
         view.backgroundColor = .background
         
         view.addSubview(scroll)
-
+        
         NSLayoutConstraint.activate([
-            NSLayoutConstraint(item: scroll, attribute: .leading , relatedBy: .equal, toItem: view, attribute: .leading , multiplier: 1, constant: 0),
-            NSLayoutConstraint(item: scroll, attribute: .trailing, relatedBy: .equal, toItem: view, attribute: .trailing, multiplier: 1, constant: 0),
-            NSLayoutConstraint(item: scroll, attribute: .top     , relatedBy: .equal, toItem: view, attribute: .top     , multiplier: 1, constant: 20),
-            NSLayoutConstraint(item: scroll, attribute: .bottom  , relatedBy: .equal, toItem: view, attribute: .bottom  , multiplier: 1, constant: 0)
+            NSLayoutConstraint(item: scroll, attribute: .leading , relatedBy: .equal, toItem: view, attribute: .leading  , multiplier: 1, constant: 0),
+            NSLayoutConstraint(item: scroll, attribute: .trailing, relatedBy: .equal, toItem: view, attribute: .trailing , multiplier: 1, constant: 0),
+            NSLayoutConstraint(item: scroll, attribute: .top     , relatedBy: .equal, toItem: view, attribute: .topMargin, multiplier: 1, constant: 0),
+            NSLayoutConstraint(item: scroll, attribute: .bottom  , relatedBy: .equal, toItem: view, attribute: .bottom   , multiplier: 1, constant: 0)
         ])
 
-        subscription = reddit.topPosts(from: "ios", limit: 1) { [weak self] result in
+        viewModel = SinglePostViewModel(subreddit: "ios", onPost: { [weak self] post in
             guard let self = self else { return }
-            switch result {
-            case .success(let posts):
-                if let post = posts.first {
-                    self.onData(ofPost: post)
-                } else {
-                    print("No posts")
-                }
-            case .failure(let error):
-                print(error)
-            }
-        }
+            self.onData(ofPost: post)
+        })
     }
     
     private func onData(ofBookmark bookmark: Bool) {
@@ -77,10 +70,6 @@ class SinglePostViewController: UIViewController {
             }
             
         }
-    }
-    
-    deinit {
-        subscription?.unsubscribe()
     }
 
 }

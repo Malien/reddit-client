@@ -6,8 +6,8 @@ struct RedditService {
     let store: ApplicationStore
     let api = RedditAPI()
 
-    func fetchTopPosts(request: TopPostsRequest, onError: @escaping (RedditAPI.Error) -> Void) {
-        api.topPosts(from: request.subreddit, limit: request.limit, after: request.after) {
+    func fetchTopPosts(request: TopPostsRequest, onError: @escaping (RedditAPI.Error) -> Void) -> Cancellable {
+        return api.topPosts(from: request.subreddit, limit: request.limit, after: request.after) {
             response in
             switch response {
             case .success(let listing):

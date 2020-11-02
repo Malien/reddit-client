@@ -29,6 +29,7 @@
 		C4563D432549FBFB00FAB781 /* PostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4563D422549FBFB00FAB781 /* PostView.swift */; };
 		C48C9C57254A1707007EB11A /* PostPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48C9C56254A1707007EB11A /* PostPresentation.swift */; };
 		C48D8F6C255079B9004742FA /* formatCount.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48D8F6B255079B9004742FA /* formatCount.swift */; };
+		C48D8F6E25508B57004742FA /* SinglePostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48D8F6D25508B56004742FA /* SinglePostViewModel.swift */; };
 		C4DDFCB4254F034E0099BFA6 /* ApplicationColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DDFCB3254F034E0099BFA6 /* ApplicationColor.swift */; };
 		C4DDFCB6254F05C10099BFA6 /* ApplicationIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DDFCB5254F05C10099BFA6 /* ApplicationIcon.swift */; };
 		C4DDFCB8254F064A0099BFA6 /* PostHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DDFCB7254F064A0099BFA6 /* PostHeaderView.swift */; };
@@ -86,6 +87,7 @@
 		C4563D422549FBFB00FAB781 /* PostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostView.swift; sourceTree = "<group>"; };
 		C48C9C56254A1707007EB11A /* PostPresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostPresentation.swift; sourceTree = "<group>"; };
 		C48D8F6B255079B9004742FA /* formatCount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = formatCount.swift; sourceTree = "<group>"; };
+		C48D8F6D25508B56004742FA /* SinglePostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SinglePostViewModel.swift; sourceTree = "<group>"; };
 		C4DDFCB3254F034E0099BFA6 /* ApplicationColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationColor.swift; sourceTree = "<group>"; };
 		C4DDFCB5254F05C10099BFA6 /* ApplicationIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationIcon.swift; sourceTree = "<group>"; };
 		C4DDFCB7254F064A0099BFA6 /* PostHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostHeaderView.swift; sourceTree = "<group>"; };
@@ -210,6 +212,7 @@
 				C4DDFCB5254F05C10099BFA6 /* ApplicationIcon.swift */,
 				C4DDFCB9254F10EA0099BFA6 /* ApplicationFont.swift */,
 				C48D8F6B255079B9004742FA /* formatCount.swift */,
+				C48D8F6D25508B56004742FA /* SinglePostViewModel.swift */,
 			);
 			path = Presentation;
 			sourceTree = "<group>";
@@ -384,6 +387,7 @@
 				C4DDFCB6254F05C10099BFA6 /* ApplicationIcon.swift in Sources */,
 				C4563D432549FBFB00FAB781 /* PostView.swift in Sources */,
 				C4563D262549F23B00FAB781 /* PostID.swift in Sources */,
+				C48D8F6E25508B57004742FA /* SinglePostViewModel.swift in Sources */,
 				C4563D392549F9A400FAB781 /* ImageDescription.swift in Sources */,
 				C4DDFCBA254F10EB0099BFA6 /* ApplicationFont.swift in Sources */,
 				C4563D332549F7F600FAB781 /* Thumbnail.swift in Sources */,

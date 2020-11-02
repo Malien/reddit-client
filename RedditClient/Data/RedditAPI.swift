@@ -9,6 +9,10 @@ extension URL {
     }
 }
 
+protocol Cancellable {
+    mutating func cancel()
+}
+
 /// It can be a class, but this is basically URL wrapper with a few methods.
 /// So copy-on-write semantics is ok here (cause again, for now it jsut contains a `baseURL` field)
 struct RedditAPI {
@@ -108,7 +112,7 @@ struct RedditAPI {
     }
 
     /// Provides means to cancell a reuqest task
-    struct Cancellable {
+    struct RequestCancellable : Cancellable {
         private let task: URLSessionDataTask
 
         init(_ task: URLSessionDataTask) {
@@ -118,6 +122,10 @@ struct RedditAPI {
         mutating func cancel() {
             task.cancel()
         }
+    }
+    
+    struct DummyCancellable : Cancellable {
+        mutating func cancel() { }
     }
 
     private typealias CompletionHandler<T> = (Result<T, Error>) -> Void
@@ -135,13 +143,13 @@ struct RedditAPI {
     private func fetch<T: Codable>(
         from components: URLComponents,
         completionHandler: @escaping CompletionHandler<T>
-    ) -> Cancellable? {
+    ) -> Cancellable {
         var components = components
         components.queryItems = components.queryItems ?? []
         components.queryItems!.append(URLQueryItem(name: "raw_json", value: "1"))
         guard let url = components.url(relativeTo: baseURL) else {
             completionHandler(.failure(.invalidURL))
-            return nil
+            return DummyCancellable()
         }
 
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
@@ -172,7 +180,7 @@ struct RedditAPI {
             }
         }
         task.resume()
-        return Cancellable(task)
+        return RequestCancellable(task)
     }
 
     /// Same as `RedditAPI.fetch(from:completionHandler:)`, except it transforms successfull value with `transform` function
@@ -189,7 +197,7 @@ struct RedditAPI {
         from components: URLComponents,
         completionHandler: @escaping CompletionHandler<U>,
         transform: @escaping (T) -> U
-    ) -> Cancellable? {
+    ) -> Cancellable {
         fetch(from: components) { (result: Result<T, Error>) in
             completionHandler(result.map(transform))
         }
@@ -212,7 +220,7 @@ struct RedditAPI {
     public func topPosts(
         from subreddit: String, limit: Int? = nil, after: PostID? = nil,
         completionHandler: @escaping (Result<Listing<Post>, Error>) -> Void
-    ) -> Cancellable? {
+    ) -> Cancellable {
         var components = URLComponents()
         components.path = "/r/\(subreddit)/top.json"
         var queryItems: [URLQueryItem] = []
