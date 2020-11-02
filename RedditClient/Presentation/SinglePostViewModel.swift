@@ -11,8 +11,15 @@ import Foundation
 class SinglePostViewModel {
     
     var subscription: SubscriptionHolder
+    var bookmarked: Bool = false {
+        didSet {
+            bookmarkHandler(bookmarked)
+        }
+    }
+    private let bookmarkHandler: (Bool) -> Void
     
-    init(subreddit: String, onPost: @escaping (Post) -> Void) {
+    init(subreddit: String, onPost: @escaping (Post) -> Void, onBookmark: @escaping (Bool) -> Void) {
+        bookmarkHandler = onBookmark
         subscription = reddit.topPosts(from: subreddit, limit: 1) { result in
             switch result {
             case .success(let posts):

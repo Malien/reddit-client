@@ -14,9 +14,8 @@ class SinglePostViewController: UIViewController {
     var postView: PostView? = nil
     var subscription: SubscriptionHolder?
     let scroll = UIScrollView().autolayouted()
-    var bookmarked = false
-    
-    var viewModel: SinglePostViewModel? = nil
+
+    var viewModel: SinglePostViewModel! = nil
         
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,16 +31,18 @@ class SinglePostViewController: UIViewController {
             NSLayoutConstraint(item: scroll, attribute: .bottom  , relatedBy: .equal, toItem: view, attribute: .bottom   , multiplier: 1, constant: 0)
         ])
 
-        viewModel = SinglePostViewModel(subreddit: "ios", onPost: { [weak self] post in
-            guard let self = self else { return }
-            self.onData(ofPost: post)
-        })
+        viewModel = SinglePostViewModel(subreddit: "ios",
+            onPost: { [weak self] post in
+                self?.onData(ofPost: post)
+            },
+            onBookmark: { [weak self] bookmark in
+                self?.onData(ofBookmark: bookmark)
+            }
+        )
     }
     
     private func onData(ofBookmark bookmark: Bool) {
-        $postView.mutate { [weak self] postView in
-            guard let self = self else { return }
-            self.bookmarked = bookmark
+        $postView.mutate { [bookmark] postView in
             guard let postView = postView else { return }
             postView.populate(bookmarked: bookmark)
         }
@@ -53,9 +54,9 @@ class SinglePostViewController: UIViewController {
             if let postView = postView {
                 postView.populate(post: post)
             } else {
-                let newPostView = PostView(post: post, bookmarked: self.bookmarked, onBookmark: { [weak self] in
+                let newPostView = PostView(post: post, bookmarked: self.viewModel.bookmarked, onBookmark: { [weak self] in
                     guard let self = self else { return }
-                    self.onData(ofBookmark: !self.bookmarked)
+                    self.viewModel.bookmarked.toggle()
                 })
                 self.scroll.addSubview(newPostView)
                 
