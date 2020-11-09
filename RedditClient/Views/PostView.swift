@@ -67,6 +67,22 @@ class PostView : UIView {
             NSLayoutConstraint(item: self, attribute: .bottomMargin, relatedBy: .equal, toItem: interactionsView, attribute: .bottom, multiplier: 1, constant: 0),
         ])
     }
+    
+    public var onComment: Optional<() -> Void> = nil {
+        didSet {
+            interactionsView.onComment = onComment
+        }
+    }
+    public var onShare: Optional<() -> Void> = nil {
+        didSet {
+            interactionsView.onShare = onShare
+        }
+    }
+    public var onVote: Optional<() -> Void> = nil {
+        didSet {
+            interactionsView.onVote = onVote
+        }
+    }
 
     public func populate(bookmarked: Bool) {
         bookmarkButton.updateBookmark(bookmarked: bookmarked)

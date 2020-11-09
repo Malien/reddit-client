@@ -12,6 +12,28 @@ class PostInteractionsView : UIView {
     
     private let votes: UpvoteView
     
+    public var onComment: Optional<() -> Void> = nil
+    public var onShare: Optional<() -> Void> = nil
+    public var onVote: Optional<() -> Void> = nil
+    
+    @objc
+    private func handleVote() {
+        guard let onVote = onVote else { return }
+        onVote()
+    }
+    
+    @objc
+    private func handleComment() {
+        guard let onComment = onComment else { return }
+        onComment()
+    }
+    
+    @objc
+    private func handleShare() {
+        guard let onShare = onShare else { return }
+        onShare()
+    }
+    
     init(votes voteCount: Int) {
         votes = UpvoteView(votes: voteCount).autolayouted()
         super.init(frame: CGRect.zero)
@@ -30,7 +52,11 @@ class PostInteractionsView : UIView {
         
         let topLine = makeLine()
         let bottomLine = makeLine()
-
+        
+        comments.addTarget(self, action: #selector(handleComment), for: .touchUpInside)
+        share.addTarget(self, action: #selector(handleShare), for: .touchUpInside)
+        votes.addTarget(self, action: #selector(handleVote), for: .touchUpInside)
+        
         addSubview(votes)
         addSubview(comments)
         addSubview(share)

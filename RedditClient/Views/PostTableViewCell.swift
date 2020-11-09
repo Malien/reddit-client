@@ -20,10 +20,17 @@ class PostTableViewCell: UITableViewCell {
     
     static let reuseIndentifier = "postCell"
     
-    let postView = PostView(post: nil).autolayouted()
+    private let postView = PostView(post: nil).autolayouted()
+    
+    public var onComment: Optional<() -> Void> = nil {
+        didSet {
+            postView.onComment = onComment
+        }
+    }
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        backgroundColor = nil
         
         contentView.addSubview(postView)
 

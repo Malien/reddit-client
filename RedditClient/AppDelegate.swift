@@ -22,8 +22,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     ) -> Bool {
         window = UIWindow(frame: UIScreen.main.bounds)
 //        let controller = SinglePostViewController()
-        let controller = PostListViewController()
-        window!.rootViewController = controller
+//        let controller = DetailPostViewController()
+        let controller = PostListViewController(subreddit: "ios")
+        let navigation = UINavigationController(rootViewController: controller)
+        window!.rootViewController = navigation
         window!.makeKeyAndVisible()
         return true
     }
