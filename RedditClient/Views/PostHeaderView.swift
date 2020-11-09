@@ -15,7 +15,7 @@ class PostHeaderView : UIView {
     let subreddit = UILabel().autolayouted()
     let title = UILabel().autolayouted()
     
-    init(post: Post) {
+    init(post: Post?) {
         super.init(frame: CGRect.zero)
         
         populate(dataFrom: post)
@@ -78,11 +78,18 @@ class PostHeaderView : UIView {
         ])
     }
     
-    public func populate(dataFrom post: Post) {
-        username.text = "u/\(post.author ?? "promotion")"
-        timestamp.text = post.userReadableTimeDiff
-        subreddit.text = "r/\(post.subreddit)"
-        title.text = post.title
+    public func populate(dataFrom post: Post?) {
+        if let post = post {
+            username.text = "u/\(post.author ?? "promotion")"
+            timestamp.text = post.userReadableTimeDiff
+            subreddit.text = "r/\(post.subreddit)"
+            title.text = post.title
+        } else {
+            username.text = nil
+            timestamp.text = nil
+            subreddit.text = nil
+            title.text = nil
+        }
     }
     
     required init?(coder: NSCoder) {

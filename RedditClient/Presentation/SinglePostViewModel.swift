@@ -23,7 +23,7 @@ class SinglePostViewModel {
         subscription = reddit.topPosts(from: subreddit, limit: 1) { result in
             switch result {
             case .success(let posts):
-                if let post = posts.first {
+                if let post = posts.items.first {
                     onPost(post)
                 } else {
                     print("No posts")

@@ -19,11 +19,11 @@ class PostView : UIView {
     private let bookmarkButton: BookmarkButton
     private let interactionsView: PostInteractionsView
 
-    init(post: Post, bookmarked: Bool = false, onBookmark: @escaping () -> Void) {
+    init(post: Post?, bookmarked: Bool = false, onBookmark: @escaping () -> Void = { }) {
         header = PostHeaderView(post: post).autolayouted()
         thumbnailHeightConstraint = NSLayoutConstraint(item: thumbnail, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant: 0)
         bookmarkButton = BookmarkButton(bookmarked: bookmarked, onClick: onBookmark).autolayouted()
-        interactionsView = PostInteractionsView(votes: post.score).autolayouted()
+        interactionsView = PostInteractionsView(votes: post?.score ?? 0).autolayouted()
         super.init(frame: CGRect.zero)
 
         populate(post: post)
@@ -50,7 +50,7 @@ class PostView : UIView {
             NSLayoutConstraint(item: thumbnail, attribute: .top     , relatedBy: .equal, toItem: header, attribute: .bottom  , multiplier: 1, constant: 0),
             NSLayoutConstraint(item: thumbnail, attribute: .leading , relatedBy: .equal, toItem: self  , attribute: .leading , multiplier: 1, constant: 0),
             NSLayoutConstraint(item: thumbnail, attribute: .trailing, relatedBy: .equal, toItem: self  , attribute: .trailing, multiplier: 1, constant: 0),
-            thumbnailHeightConstraint,
+//            thumbnailHeightConstraint,
             // Selftext in view
             NSLayoutConstraint(item: selftext, attribute: .top     , relatedBy: .equal, toItem: thumbnail, attribute: .bottom        , multiplier: 1, constant: 16),
             NSLayoutConstraint(item: selftext, attribute: .leading , relatedBy: .equal, toItem: self     , attribute: .leadingMargin , multiplier: 1, constant: 0),
@@ -67,31 +67,29 @@ class PostView : UIView {
             NSLayoutConstraint(item: self, attribute: .bottomMargin, relatedBy: .equal, toItem: interactionsView, attribute: .bottom, multiplier: 1, constant: 0),
         ])
     }
-    
+
     public func populate(bookmarked: Bool) {
         bookmarkButton.updateBookmark(bookmarked: bookmarked)
     }
     
-    public func populate(post: Post) {
+    public func populate(post: Post?) {
         header.populate(dataFrom: post)
-        selftext.text = post.selfText
-        interactionsView.populate(votes: post.score)
-        if let preview = post.preview, let image = preview.images.first {
-            thumbnail.sd_setImage(with: image.source.url) { [weak self] (_, _, _, _) in
-                guard let self = self else { return }
-                let multiplier = CGFloat(image.source.height) / CGFloat(image.source.width)
-                self.thumbnailHeightConstraint.isActive = false
-                self.thumbnailHeightConstraint = NSLayoutConstraint(
-                    item: self.thumbnail,
-                    attribute: .height,
-                    relatedBy: .equal,
-                    toItem: self.thumbnail,
-                    attribute: .width,
-                    multiplier: multiplier,
-                    constant: 0
-                )
-                self.thumbnailHeightConstraint.isActive = true
-            }
+        selftext.text = post?.selfText
+        interactionsView.populate(votes: post?.score ?? 0)
+        if let preview = post?.preview, let image = preview.images.first {
+            let multiplier = CGFloat(image.source.height) / CGFloat(image.source.width)
+            self.thumbnailHeightConstraint.isActive = false
+            self.thumbnailHeightConstraint = NSLayoutConstraint(
+                item: self.thumbnail,
+                attribute: .height,
+                relatedBy: .equal,
+                toItem: self.thumbnail,
+                attribute: .width,
+                multiplier: multiplier,
+                constant: 0
+            )
+            self.thumbnailHeightConstraint.isActive = true
+            thumbnail.sd_setImage(with: image.source.url)
         } else {
             thumbnail.image = nil
         }

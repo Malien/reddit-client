@@ -21,7 +21,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
         window = UIWindow(frame: UIScreen.main.bounds)
-        let controller = SinglePostViewController()
+//        let controller = SinglePostViewController()
+        let controller = PostListViewController()
         window!.rootViewController = controller
         window!.makeKeyAndVisible()
         return true

@@ -11,8 +11,9 @@ import Foundation
 /// This is a post, but throughout reddit api doccumentations
 /// it is refered to as a link for some reason
 /// This is both, serialization container for reddit API responses, and domain model object
-struct Post: RedditEntity, Identifiable {
+struct Post: RedditEntity, Identifiable, Keyable {
     static var kind: String { "t3" }
+    var key: PostID { id }
     
     let id: PostID
     /// fullname property (a combination of `kind` and `id`, like `t3_ji8ght`)

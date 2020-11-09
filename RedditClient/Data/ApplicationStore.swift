@@ -1,15 +1,11 @@
 import Foundation
 
-struct TopPostsRequest: Hashable, Codable {
-    let subreddit: String
-    let limit: Int?
-    let after: PostID?
-}
-
 final class ApplicationStore {
-    var subredditTopPosts: Cache<TopPostsRequest, [Post]>
+    var subredditTopPosts: Cache<TopPostsRequest, PaginationContainer<Post>>
 
-    init(subredditTopPosts: Cache<TopPostsRequest, [Post]> = Cache()) {
+    init(
+        subredditTopPosts: Cache<TopPostsRequest, PaginationContainer<Post>> = Cache()
+    ) {
         self.subredditTopPosts = subredditTopPosts
     }
 }
@@ -19,17 +15,17 @@ extension ApplicationStore: Codable {
         case subredditTopPosts
     }
 
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(subredditTopPosts, forKey: .subredditTopPosts)
-    }
-
-    convenience init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        let subredditTopPosts = try container.decode(
-            Cache<TopPostsRequest, [Post]>.self, forKey: .subredditTopPosts)
-        self.init(subredditTopPosts: subredditTopPosts)
-    }
+//    func encode(to encoder: Encoder) throws {
+//        var container = encoder.container(keyedBy: CodingKeys.self)
+//        try container.encode(subredditTopPosts, forKey: .subredditTopPosts)
+//    }
+//
+//    convenience init(from decoder: Decoder) throws {
+//        let container = try decoder.container(keyedBy: CodingKeys.self)
+//        let subredditTopPosts = try container.decode(
+//            Cache<TopPostsRequest, [Post]>.self, forKey: .subredditTopPosts)
+//        self.init(subredditTopPosts: subredditTopPosts)
+//    }
 
     struct NoCacheDir: Error {}
 
