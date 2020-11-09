@@ -18,3 +18,7 @@ extension PostID: Encodable, Decodable {
     }
 
 }
+
+extension PostID: CustomStringConvertible {
+    var description: String { id }
+}

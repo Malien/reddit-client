@@ -16,15 +16,14 @@ protocol Keyable {
 struct PaginationContainer<T> where T: Keyable {
     var items: [T]
     let start: T.Key?
-    let totalCount: Int
-    
-    var moreAvailable: Bool { items.count != totalCount }
+
+    var hasMore: Bool
     
     var doFetch: Optional<(_ limit: Int, _ after: T.Key?) -> Void> = nil
     
     func fetchMore(count: Int) {
-        if let doFetch = doFetch {
-            doFetch(count, items.first?.key)
+        if let doFetch = doFetch, let last = items.last?.key {
+            doFetch(count, last)
         }
     }
 }
@@ -33,6 +32,6 @@ extension PaginationContainer: Codable where T: Codable, T.Key: Codable {
     enum CodingKeys: String, CodingKey {
         case items
         case start
-        case totalCount
+        case hasMore
     }
 }

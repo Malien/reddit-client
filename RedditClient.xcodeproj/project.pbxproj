@@ -45,6 +45,8 @@
 		C4BA82812559420200FFFDEF /* ThreadSafe.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4563D232549F23B00FAB781 /* ThreadSafe.swift */; };
 		C4BA82822559420200FFFDEF /* RedditEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4563D3C2549FA7F00FAB781 /* RedditEntity.swift */; };
 		C4BA82832559420200FFFDEF /* PaginationContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4BA8271255896CA00FFFDEF /* PaginationContainer.swift */; };
+		C4BA8285255946B700FFFDEF /* PostListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4BA8284255946B700FFFDEF /* PostListViewModel.swift */; };
+		C4BA8287255946DF00FFFDEF /* Subreddit.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4BA8286255946DF00FFFDEF /* Subreddit.swift */; };
 		C4C23D7325585C5F00D48DB3 /* PostListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C23D7225585C5F00D48DB3 /* PostListViewController.swift */; };
 		C4C23D7525585E1D00D48DB3 /* PostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C23D7425585E1D00D48DB3 /* PostTableViewCell.swift */; };
 		C4DDFCB4254F034E0099BFA6 /* ApplicationColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DDFCB3254F034E0099BFA6 /* ApplicationColor.swift */; };
@@ -106,6 +108,8 @@
 		C48D8F6B255079B9004742FA /* formatCount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = formatCount.swift; sourceTree = "<group>"; };
 		C48D8F6D25508B56004742FA /* SinglePostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SinglePostViewModel.swift; sourceTree = "<group>"; };
 		C4BA8271255896CA00FFFDEF /* PaginationContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaginationContainer.swift; sourceTree = "<group>"; };
+		C4BA8284255946B700FFFDEF /* PostListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostListViewModel.swift; sourceTree = "<group>"; };
+		C4BA8286255946DF00FFFDEF /* Subreddit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subreddit.swift; sourceTree = "<group>"; };
 		C4C23D7225585C5F00D48DB3 /* PostListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostListViewController.swift; sourceTree = "<group>"; };
 		C4C23D7425585E1D00D48DB3 /* PostTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTableViewCell.swift; sourceTree = "<group>"; };
 		C4DDFCB3254F034E0099BFA6 /* ApplicationColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationColor.swift; sourceTree = "<group>"; };
@@ -222,6 +226,7 @@
 				C4563D382549F9A400FAB781 /* ImageDescription.swift */,
 				C4563D342549F82600FAB781 /* Vote.swift */,
 				C4563D322549F7F600FAB781 /* Thumbnail.swift */,
+				C4BA8286255946DF00FFFDEF /* Subreddit.swift */,
 			);
 			path = Domain;
 			sourceTree = "<group>";
@@ -235,6 +240,7 @@
 				C4DDFCB9254F10EA0099BFA6 /* ApplicationFont.swift */,
 				C48D8F6B255079B9004742FA /* formatCount.swift */,
 				C48D8F6D25508B56004742FA /* SinglePostViewModel.swift */,
+				C4BA8284255946B700FFFDEF /* PostListViewModel.swift */,
 			);
 			path = Presentation;
 			sourceTree = "<group>";
@@ -415,6 +421,7 @@
 				C4BA8272255896CA00FFFDEF /* PaginationContainer.swift in Sources */,
 				C4563CED2549F18400FAB781 /* SinglePostViewController.swift in Sources */,
 				C4563CE92549F18400FAB781 /* AppDelegate.swift in Sources */,
+				C4BA8287255946DF00FFFDEF /* Subreddit.swift in Sources */,
 				C4DDFCC1254F64CD0099BFA6 /* PostInteractionsView.swift in Sources */,
 				C4DDFCBF254F52F70099BFA6 /* BookmarkButton.swift in Sources */,
 				C48D8F6C255079B9004742FA /* formatCount.swift in Sources */,
@@ -423,6 +430,7 @@
 				C4563D432549FBFB00FAB781 /* PostView.swift in Sources */,
 				C4563D262549F23B00FAB781 /* PostID.swift in Sources */,
 				C48D8F6E25508B57004742FA /* SinglePostViewModel.swift in Sources */,
+				C4BA8285255946B700FFFDEF /* PostListViewModel.swift in Sources */,
 				C4563D392549F9A400FAB781 /* ImageDescription.swift in Sources */,
 				C4DDFCBA254F10EB0099BFA6 /* ApplicationFont.swift in Sources */,
 				C4563D332549F7F600FAB781 /* Thumbnail.swift in Sources */,

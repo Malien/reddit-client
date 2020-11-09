@@ -31,7 +31,7 @@ class PostTableViewCell: UITableViewCell {
             NSLayoutConstraint(item: postView   , attribute: .leading , relatedBy: .equal, toItem: contentView, attribute: .leading , multiplier: 1, constant: 0),
             NSLayoutConstraint(item: postView   , attribute: .top     , relatedBy: .equal, toItem: contentView, attribute: .top     , multiplier: 1, constant: 0),
             NSLayoutConstraint(item: postView   , attribute: .trailing, relatedBy: .equal, toItem: contentView, attribute: .trailing, multiplier: 1, constant: 0),
-            NSLayoutConstraint(item: contentView, attribute: .bottom  , relatedBy: .equal, toItem: postView   , attribute: .bottom  , multiplier: 1, constant: 0)
+            NSLayoutConstraint(item: contentView, attribute: .bottom  , relatedBy: .equal, toItem: postView   , attribute: .bottom  , multiplier: 1, constant: 40)
         ])
     }
     

@@ -92,6 +92,17 @@ class PostView : UIView {
             thumbnail.sd_setImage(with: image.source.url)
         } else {
             thumbnail.image = nil
+            self.thumbnailHeightConstraint.isActive = false
+            self.thumbnailHeightConstraint = NSLayoutConstraint(
+                item: self.thumbnail,
+                attribute: .height,
+                relatedBy: .equal,
+                toItem: nil,
+                attribute: .height,
+                multiplier: 1,
+                constant: 0
+            )
+            self.thumbnailHeightConstraint.isActive = true
         }
     }
     

@@ -10,12 +10,12 @@ import UIKit
 
 class PostListViewController: UITableViewController {
     
-    var post: Post? = nil
-    var viewModel: SinglePostViewModel! = nil
+    var posts: PaginationContainer<Post>? = nil
+    var viewModel: PostListViewModel! = nil
 
-    private func onData(ofPost post: Post) {
+    private func onData(ofPosts posts: PaginationContainer<Post>) {
         DispatchQueue.main.async {
-            self.post = post
+            self.posts = posts
             self.tableView.reloadData()
         }
     }
@@ -28,34 +28,39 @@ class PostListViewController: UITableViewController {
         self.tableView.rowHeight = UITableView.automaticDimension;
         self.tableView.estimatedRowHeight = 400;
         
-        viewModel = SinglePostViewModel(
+        tableView.allowsSelection = false
+        tableView.separatorStyle = .none
+
+        viewModel = PostListViewModel(
             subreddit: "ios",
-            onPost: { [weak self] post in
-                guard let self = self else { return }
-                self.onData(ofPost: post)
-            },
-            onBookmark: { _ in }
+            onPosts: { [weak self] posts in
+                print(posts.items.map { $0.title }.joined(separator: "\n"))
+                print("\n")
+                self?.onData(ofPosts: posts)
+            }
         )
     }
 
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        post == nil ? 0 : 1
+        posts?.items.count ?? 0
+    }
+    
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if let posts = posts, posts.hasMore && indexPath.row > posts.items.count - 2 {
+            posts.fetchMore(count: 5)
+        }
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PostTableViewCell.reuseIndentifier, for: indexPath) as! PostTableViewCell
         
-        cell.autolayouted()
-        
-        cell.populate(post: post!)
+        cell.populate(post: posts!.items[indexPath.row])
 
         return cell
     }

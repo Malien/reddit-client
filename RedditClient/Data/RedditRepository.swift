@@ -73,7 +73,7 @@ struct RedditRepository {
 //    }
     
     func topPosts(
-        from subreddit: String,
+        from subreddit: Subreddit,
         limit: Int,
         after: PostID? = nil,
         force: Bool = false,

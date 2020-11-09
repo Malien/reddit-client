@@ -32,7 +32,7 @@ class PostHeaderView : UIView {
         subreddit.textColor = .subtext
         subreddit.font = .defaultText
         
-        title.numberOfLines = 3
+        title.numberOfLines = 0
         title.textColor = .text
         title.font = .title
 

@@ -218,7 +218,7 @@ struct RedditAPI {
     ///         with `Result.failure(RedditAPI.Error.invalidURL)` and fetch iteself will return `nil`
     @discardableResult
     public func topPosts(
-        from subreddit: String, limit: Int? = nil, after: PostID? = nil,
+        from subreddit: Subreddit, limit: Int? = nil, after: PostID? = nil,
         completionHandler: @escaping (Result<Listing<Post>, Error>) -> Void
     ) -> Cancellable {
         var components = URLComponents()

@@ -1,7 +1,7 @@
 import Foundation
 
 struct TopPostsRequest: Hashable, Codable {
-    let subreddit: String
+    let subreddit: Subreddit
     let start: PostID?
 }
 
@@ -43,12 +43,14 @@ struct RedditService {
                     // TODO: check if same request called multiple times
                     container.items += listing.children.map { $0.inner }
                     container.doFetch = fetchMore
+                    container.hasMore = listing.dist == limit
                     self.store.subredditTopPosts[request] = container
                 } else {
+                    let items = listing.children.map { $0.inner }
                     let container = PaginationContainer(
-                        items: listing.children.map { $0.inner },
+                        items: items,
                         start: request.start,
-                        totalCount: listing.dist,
+                        hasMore: listing.dist == limit,
                         doFetch: fetchMore
                     )
                     self.store.subredditTopPosts[request] = container

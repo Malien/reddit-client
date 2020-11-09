@@ -18,7 +18,7 @@ class SinglePostViewModel {
     }
     private let bookmarkHandler: (Bool) -> Void
     
-    init(subreddit: String, onPost: @escaping (Post) -> Void, onBookmark: @escaping (Bool) -> Void) {
+    init(subreddit: Subreddit, onPost: @escaping (Post) -> Void, onBookmark: @escaping (Bool) -> Void) {
         bookmarkHandler = onBookmark
         subscription = reddit.topPosts(from: subreddit, limit: 1) { result in
             switch result {

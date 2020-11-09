@@ -44,7 +44,7 @@ struct Post: RedditEntity, Identifiable, Keyable {
     let score: Int
     let selfText: String
     let selfTextHTML: String?
-    let subreddit: String
+    let subreddit: Subreddit
     let subredditID: String
     let thumbnail: Thumbnail
     let title: String

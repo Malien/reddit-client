@@ -11,9 +11,9 @@ final class ApplicationStore {
 }
 
 extension ApplicationStore: Codable {
-    enum CodingKeys: String, CodingKey {
-        case subredditTopPosts
-    }
+//    enum CodingKeys: String, CodingKey {
+//        case subredditTopPosts
+//    }
 
 //    func encode(to encoder: Encoder) throws {
 //        var container = encoder.container(keyedBy: CodingKeys.self)
