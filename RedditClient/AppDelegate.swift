@@ -8,9 +8,6 @@
 
 import UIKit
 
-let store = ApplicationStore()
-let reddit = RedditRepository(store: store)
-
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 

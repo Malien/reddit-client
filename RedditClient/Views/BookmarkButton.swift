@@ -13,10 +13,10 @@ class BookmarkButton: UIButton {
     private let icon = UIImageView().autolayouted()
     private let label = UILabel().autolayouted()
     
-    let clickHandler: () -> Void
+    var onClick: Optional<() -> Void>
     
-    init(bookmarked: Bool, onClick: @escaping () -> Void = {}) {
-        clickHandler = onClick
+    init(bookmarked: Bool, onClick: Optional<() -> Void> = nil) {
+        self.onClick = onClick
         super.init(frame: CGRect.zero)
         
         updateBookmark(bookmarked: bookmarked)
@@ -60,13 +60,11 @@ class BookmarkButton: UIButton {
         }
     }
     
-    required init?(coder: NSCoder) {
-        return nil
-//        super.init(coder: coder)
-    }
+    required init?(coder: NSCoder) { nil }
     
     @objc
     private func handleClick() {
-        clickHandler()
+        guard let onClick = onClick else { return }
+        onClick()
     }
 }

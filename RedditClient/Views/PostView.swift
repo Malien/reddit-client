@@ -67,23 +67,24 @@ class PostView : UIView {
             NSLayoutConstraint(item: self, attribute: .bottomMargin, relatedBy: .equal, toItem: interactionsView, attribute: .bottom, multiplier: 1, constant: 0),
         ])
     }
-    
-    public var onComment: Optional<() -> Void> = nil {
-        didSet {
-            interactionsView.onComment = onComment
-        }
-    }
-    public var onShare: Optional<() -> Void> = nil {
-        didSet {
-            interactionsView.onShare = onShare
-        }
-    }
-    public var onVote: Optional<() -> Void> = nil {
-        didSet {
-            interactionsView.onVote = onVote
-        }
-    }
 
+    public var onComment: Optional<() -> Void> {
+        set { interactionsView.onComment = newValue }
+        get { interactionsView.onComment }
+    }
+    public var onVote: Optional<() -> Void> {
+        set { interactionsView.onVote = newValue }
+        get { interactionsView.onVote }
+    }
+    public var onShare: Optional<() -> Void> {
+        set { interactionsView.onShare = newValue }
+        get { interactionsView.onShare }
+    }
+    public var onBookmark: Optional<() -> Void> {
+        set { bookmarkButton.onClick = newValue }
+        get { bookmarkButton.onClick }
+    }
+        
     public func populate(bookmarked: Bool) {
         bookmarkButton.updateBookmark(bookmarked: bookmarked)
     }

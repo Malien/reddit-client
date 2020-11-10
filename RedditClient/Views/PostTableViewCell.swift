@@ -8,26 +8,27 @@
 
 import UIKit
 
-protocol ReusableCell {
-    static var reuseIdentifier: String { get }
-}
-
-extension UITableView {
-//    func register(reusableCellClass: ReusableCell)
-}
-
 class PostTableViewCell: UITableViewCell {
-    
-    static let reuseIndentifier = "postCell"
     
     private let postView = PostView(post: nil).autolayouted()
     
-    public var onComment: Optional<() -> Void> = nil {
-        didSet {
-            postView.onComment = onComment
-        }
+    public var onComment: Optional<() -> Void> {
+        set { postView.onComment = newValue }
+        get { postView.onComment }
     }
-
+    public var onVote: Optional<() -> Void> {
+        set { postView.onVote = newValue }
+        get { postView.onVote }
+    }
+    public var onShare: Optional<() -> Void> {
+        set { postView.onShare = newValue }
+        get { postView.onShare }
+    }
+    public var onBookmark: Optional<() -> Void> {
+        set { postView.onBookmark = newValue }
+        get { postView.onBookmark }
+    }
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         backgroundColor = nil
@@ -44,6 +45,10 @@ class PostTableViewCell: UITableViewCell {
     
     override func prepareForReuse() {
         postView.populate(post: nil)
+        postView.onBookmark = nil
+        postView.onComment = nil
+        postView.onVote = nil
+        postView.onShare = nil
     }
     
     func populate(post: Post) {

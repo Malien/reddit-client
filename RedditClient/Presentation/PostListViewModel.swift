@@ -11,11 +11,9 @@ import Foundation
 class PostListViewModel {
     
     private var subscription: SubscriptionHolder
-    private let postsHandler: (PaginationContainer<Post>) -> Void
-    
+
     init(subreddit: Subreddit, onPosts: @escaping (PaginationContainer<Post>) -> Void) {
-        postsHandler = onPosts
-        subscription = reddit.topPosts(from: subreddit, limit: 5) { result in
+        subscription = ApplicationServices.reddit.topPosts(from: subreddit, limit: 5) { result in
             switch result {
             case .success(let posts):
                 onPosts(posts)

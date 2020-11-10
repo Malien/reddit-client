@@ -10,8 +10,11 @@ import UIKit
 
 class PostListViewController: UITableViewController {
     
+    static let reuseIndentifier = "postCell"
+    
     var posts: PaginationContainer<Post>? = nil
-    var viewModel: PostListViewModel! = nil
+    var postListViewModel: PostListViewModel! = nil
+    var bookmarksViewModel: PostBookmarksViewModel! = nil
     
     let subreddit: Subreddit
     
@@ -29,13 +32,26 @@ class PostListViewController: UITableViewController {
         }
     }
     
-    @objc private func navigateToBookmarks() {
+    private func onData(ofBookmarkedPostWithID id: PostID, bookmarked: Bool) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            let idx = self.posts?.items.firstIndex { $0.id == id }
+            guard idx != nil else { return }
+            let indexPath = IndexPath(row: idx!, section: 0)
+//            self.tableView.reloadRows(at: [indexPath], with: .automatic)
+            let cell = self.tableView.cellForRow(at: indexPath) as? PostTableViewCell
+            cell?.populate(bookmarked: bookmarked)
+        }
+    }
+    
+    @objc
+    private func navigateToBookmarks() {
         print("Nav")
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.tableView.register(PostTableViewCell.self, forCellReuseIdentifier: PostTableViewCell.reuseIndentifier)
+        self.tableView.register(PostTableViewCell.self, forCellReuseIdentifier: Self.reuseIndentifier)
         
         let bgView = UIView()
         bgView.backgroundColor = .background
@@ -48,25 +64,27 @@ class PostListViewController: UITableViewController {
         
         navigationItem.title = "r/\(subreddit)"
         let bookmarksButton = UIBarButtonItem(barButtonSystemItem: .bookmarks, target: self, action: #selector(navigateToBookmarks))
-//        let bookmarksButton = UIBarButtonItem(image: ApplicationIcon.bookmarkOutlined, style: .plain, target: self, action: #selector(navigateToBookmarks))
         bookmarksButton.tintColor = .accent
-//        bookmarksButton.image.resize
         navigationItem.rightBarButtonItem = bookmarksButton
+        
+        bookmarksViewModel = PostBookmarksViewModel(onBookmarked: { [weak self] (id, bookmarked) in
+            self?.onData(ofBookmarkedPostWithID: id, bookmarked: bookmarked)
+        })
 
-        viewModel = PostListViewModel(
+        postListViewModel = PostListViewModel(
             subreddit: subreddit,
             onPosts: { [weak self] posts in
-                print(posts.items.map { $0.title }.joined(separator: "\n"))
-                print("\n")
                 self?.onData(ofPosts: posts)
             }
         )
     }
     
-    private func selected(post: Post) {
-//        navigationController?.present(PostListViewController(style: .plain), animated: true, completion: nil)
-//        navigationController?.pushViewController(PostListViewController(subreddit: "AskMen"), animated: true)
+    private func selected(commentsOfPost post: Post) {
         navigationController?.pushViewController(DetailPostViewController(post: post), animated: true)
+    }
+    
+    private func on(_ post: Post, bookmarkStatus: Bool) {
+        bookmarksViewModel.bookmark(post: post)
     }
 
     // MARK: - Table view data source
@@ -86,14 +104,17 @@ class PostListViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: PostTableViewCell.reuseIndentifier, for: indexPath) as! PostTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: Self.reuseIndentifier, for: indexPath) as! PostTableViewCell
         
         let post = posts!.items[indexPath.row]
         cell.onComment = { [weak self] in
-            guard let self = self else { return }
-            self.selected(post: post)
+            self?.selected(commentsOfPost: post)
+        }
+        cell.onBookmark = { [weak self] in
+            self?.bookmarksViewModel.toggle(bookmarkOfPost: post)
         }
         cell.populate(post: post)
+        cell.populate(bookmarked: bookmarksViewModel.isBookmarked(postWithID: post.id))
 
         return cell
     }

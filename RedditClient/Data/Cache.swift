@@ -5,27 +5,6 @@ extension Array {
     var slice: ArraySlice<Element> { self[startIndex...endIndex] }
 }
 
-extension Array where Element: AnyObject {
-    func index(of element: Element) -> Index? {
-        for (i, value) in self.enumerated() {
-            if value === element {
-                return i
-            }
-        }
-        return nil
-    }
-
-    mutating func remove(element: Element) {
-        guard let idx = index(of: element) else { return }
-        remove(at: idx)
-    }
-}
-
-fileprivate enum CacheQueue {
-    /// Unfourtunatelly all caches HAVE TO share a single queue to be able to use property wrappers with ability to flatten queues
-    static let cacheQueue = DispatchQueue(label: "ua.edu.ukma.ios.Cache", qos: .utility)
-}
-
 // TODO: Add timed expiration
 /// Expected to be used with value types as keys are being wrapped into class wrappers
 struct Cache<Key, Entity> where Key: Hashable {
@@ -39,12 +18,8 @@ struct Cache<Key, Entity> where Key: Hashable {
     }
 
     typealias Listener = (Event) -> Void
-
-    struct SubscriptionID: Hashable {
-        private let id: Int
-        var next: SubscriptionID { SubscriptionID(id: id + 1) }
-        static var firstID: SubscriptionID { SubscriptionID(id: 0) }
-    }
+    
+    typealias SubID = SubscriptionID<Self>
 
     final class WrappedKey: NSObject {
         let key: Key
@@ -61,73 +36,57 @@ struct Cache<Key, Entity> where Key: Hashable {
     }
 
     final class ObservedEntity {
-        let queue = DispatchQueue(
-            label: "ua.edu.ukma.ios.Cache<\(Entity.self)>.ObservedEntity",
-            target: CacheQueue.cacheQueue)
         private(set) var item: Entity?
         let key: Key
-        private var listeners: [SubscriptionID: Listener] = [:]
-        private var currentID = SubscriptionID.firstID
+        
+        typealias EE = EventEmitter<Event, Cache<Key, Entity>>
+        var eventEmitter: EE = EventEmitter(queue: ApplicationServices.cacheQueue)
 
         init(key: Key, item: Entity? = nil) {
             self.item = item
             self.key = key
         }
 
-        func subscribe(_ listener: @escaping Listener) -> SubscriptionID {
-            return queue.sync {
-                let sub = currentID
-                listeners[sub] = listener
-                currentID = currentID.next
-                return sub
-            }
+        func subscribe(_ listener: @escaping EE.Listener) -> EE.SubID {
+            eventEmitter.subscribe(listener)
         }
 
-        func unsubscribe(_ subscription: SubscriptionID) {
-            queue.async {
-                self.listeners.removeValue(forKey: subscription)
-            }
-        }
-
-        func fire(event: Event) {
-            for listener in listeners.values {
-                queue.async {
-                    listener(event)
-                }
-            }
+        func unsubscribe(_ subscription: EE.SubID) {
+            eventEmitter.unsubscribe(subscription)
         }
 
         func remove() {
-            queue.async {
+            ApplicationServices.cacheQueue.async {
                 guard let oldValue = self.item else { return }
                 self.item = nil
-                self.fire(event: .removed(oldValue: oldValue))
+                self.eventEmitter.emit(event: .removed(oldValue: oldValue))
             }
         }
 
         func update(newValue: Entity) {
-            queue.async {
+            ApplicationServices.cacheQueue.async {
                 self.item = newValue
                 if let oldValue = self.item {
-                    self.fire(event: .updated(newValue: newValue, oldValue: oldValue))
+                    self.eventEmitter.emit(event: .updated(newValue: newValue, oldValue: oldValue))
                 } else {
-                    self.fire(event: .added(newValue))
+                    self.eventEmitter.emit(event: .added(newValue))
                 }
             }
         }
 
         func expire() {
-            queue.async {
+            ApplicationServices.cacheQueue.async {
                 guard let oldValue = self.item else { return }
                 self.item = nil
-                self.fire(event: .removed(oldValue: oldValue))
+                self.eventEmitter.emit(event: .removed(oldValue: oldValue))
             }
         }
 
     }
 
     private final class CacheDelegate: NSObject, NSCacheDelegate {
-        @ThreadSafe(wrappedValue: Set<Key>(), queueTarget: CacheQueue.cacheQueue) var keys
+        @ThreadSafe(queueTarget: ApplicationServices.cacheQueue)
+        var keys = Set<Key>()
 
         func cache(_ cache: NSCache<AnyObject, AnyObject>, willEvictObject obj: Any) {
             guard let entry = obj as? ObservedEntity else { return }
@@ -139,7 +98,7 @@ struct Cache<Key, Entity> where Key: Hashable {
     // MARK: Actual implementation
 
     @ThreadSafe(
-        wrappedValue: NSCache<WrappedKey, ObservedEntity>(), queueTarget: CacheQueue.cacheQueue)
+        wrappedValue: NSCache<WrappedKey, ObservedEntity>(), queueTarget: ApplicationServices.cacheQueue)
     private var storage
     private let delegate = CacheDelegate()
 
@@ -181,7 +140,7 @@ struct Cache<Key, Entity> where Key: Hashable {
         }
     }
 
-    mutating func subscribe(to key: Key, callback: @escaping Listener) -> SubscriptionID {
+    mutating func subscribe(to key: Key, callback: @escaping Listener) -> SubID {
         let wrapped = WrappedKey(key)
         if let entry = storage.object(forKey: wrapped) {
             return entry.subscribe(callback)
@@ -194,7 +153,7 @@ struct Cache<Key, Entity> where Key: Hashable {
         }
     }
 
-    mutating func unsubscribe(from key: Key, subscription: SubscriptionID) {
+    mutating func unsubscribe(from key: Key, subscription: SubID) {
         storage.object(forKey: WrappedKey(key))?.unsubscribe(subscription)
     }
 }

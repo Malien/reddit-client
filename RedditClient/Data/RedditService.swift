@@ -39,6 +39,11 @@ struct RedditService {
                     }
                     cancellable.add(cancellation: cancellation)
                 }
+                #if CACHE_POSTS
+                for post in listing.children {
+                    self.store.posts[post.inner.id] = post.inner
+                }
+                #endif
                 if var container = self.store.subredditTopPosts[request] {
                     // TODO: check if same request called multiple times
                     container.items += listing.children.map { $0.inner }

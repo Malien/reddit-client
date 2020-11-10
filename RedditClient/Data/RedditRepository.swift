@@ -25,7 +25,7 @@ struct RedditRepository {
 
     struct Subscription<Key, Value>: SubscriptionHolder where Key: Hashable {
         let request: Key
-        let subscription: Cache<Key, Value>.SubscriptionID
+        let subscription: SubscriptionID<Cache<Key, Value>>
         private(set) var store: ApplicationStore
         let cache: WritableKeyPath<ApplicationStore, Cache<Key, Value>>
         private(set) var cancellations: [Cancellable]
