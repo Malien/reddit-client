@@ -12,9 +12,9 @@ class PostListViewController: UITableViewController {
     
     static let reuseIndentifier = "postCell"
     
-    var posts: PaginationContainer<Post>? = nil
-    var postListViewModel: PostListViewModel! = nil
-    var bookmarksViewModel: PostBookmarksViewModel! = nil
+    private var posts: PaginationContainer<Post>? = nil
+    private var postListViewModel: PostListViewModel! = nil
+    private var bookmarksViewModel: PostBookmarksViewModel! = nil
     
     let subreddit: Subreddit
     
@@ -46,7 +46,7 @@ class PostListViewController: UITableViewController {
     
     @objc
     private func navigateToBookmarks() {
-        print("Nav")
+        navigationController?.pushViewController(BookmarkedPostListController(), animated: true)
     }
 
     override func viewDidLoad() {
@@ -118,15 +118,5 @@ class PostListViewController: UITableViewController {
 
         return cell
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

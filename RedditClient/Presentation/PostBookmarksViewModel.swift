@@ -42,4 +42,6 @@ class PostBookmarksViewModel {
     func isBookmarked(postWithID id: PostID) -> Bool {
         ApplicationServices.store.saved.contains(postWithID: id)
     }
+    
+    var posts: [Post] { ApplicationServices.store.saved.posts }
 }
