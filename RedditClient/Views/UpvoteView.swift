@@ -12,14 +12,17 @@ class UpvoteView : UIButton {
     
     let icon = UIImageView().autolayouted()
     let label = UILabel().autolayouted()
+    var onClick: Optional<() -> Void>
     
-    init(votes: Int) {
+    init(votes: Int, onClick: Optional<() -> Void> = nil) {
+        self.onClick = onClick
         super.init(frame: CGRect.zero)
         
         populate(votes: votes)
         
         addSubview(icon)
         addSubview(label)
+        addTarget(self, action: #selector(handleClick), for: .touchUpInside)
         
         guard let image = icon.image else { return }
         let multiplier = image.size.height / image.size.width
@@ -59,4 +62,11 @@ class UpvoteView : UIButton {
     }
     
     required init?(coder: NSCoder) { nil }
+
+    @objc
+    private func handleClick() {
+        guard let onClick = onClick else { return }
+        onClick()
+    }
+    
 }

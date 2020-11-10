@@ -11,38 +11,28 @@ import UIKit
 class PostInteractionsView : UIView {
     
     private let votes: UpvoteView
+    private let comments = LabeledButton(icon: ApplicationIcon.comments, label: "4").autolayouted()
+    private let share = LabeledButton(icon: ApplicationIcon.share ,label: "Share").autolayouted()
     
-    public var onComment: Optional<() -> Void> = nil
-    public var onShare: Optional<() -> Void> = nil
-    public var onVote: Optional<() -> Void> = nil
-    
-    @objc
-    private func handleVote() {
-        guard let onVote = onVote else { return }
-        onVote()
+    public var onComment: Optional<() -> Void> {
+        set { comments.onClick = newValue }
+        get { comments.onClick }
     }
-    
-    @objc
-    private func handleComment() {
-        guard let onComment = onComment else { return }
-        onComment()
+    public var onShare: Optional<() -> Void> {
+        set { share.onClick = newValue }
+        get { share.onClick }
     }
-    
-    @objc
-    private func handleShare() {
-        guard let onShare = onShare else { return }
-        onShare()
+    public var onVote: Optional<() -> Void> {
+        set { votes.onClick = newValue }
+        get { votes.onClick }
     }
-    
+
     init(votes voteCount: Int) {
         votes = UpvoteView(votes: voteCount).autolayouted()
         super.init(frame: CGRect.zero)
         
         directionalLayoutMargins = NSDirectionalEdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
-        
-        let comments = LabeledButton(icon: ApplicationIcon.comments, label: "4").autolayouted()
-        let share = LabeledButton(icon: ApplicationIcon.share ,label: "Share").autolayouted()
-        
+
         func makeLine() -> UIView {
             let line = UIView().autolayouted()
             line.backgroundColor = .subtext
@@ -52,10 +42,6 @@ class PostInteractionsView : UIView {
         
         let topLine = makeLine()
         let bottomLine = makeLine()
-        
-        comments.addTarget(self, action: #selector(handleComment), for: .touchUpInside)
-        share.addTarget(self, action: #selector(handleShare), for: .touchUpInside)
-        votes.addTarget(self, action: #selector(handleVote), for: .touchUpInside)
         
         addSubview(votes)
         addSubview(comments)

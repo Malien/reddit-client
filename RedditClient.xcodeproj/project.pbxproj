@@ -28,6 +28,7 @@
 		C4563D3F2549FABB00FAB781 /* PostPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4563D3E2549FABB00FAB781 /* PostPreview.swift */; };
 		C4563D432549FBFB00FAB781 /* PostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4563D422549FBFB00FAB781 /* PostView.swift */; };
 		C45C847A255AE05000C9181F /* EventEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45C8479255AE05000C9181F /* EventEmitter.swift */; };
+		C45C847C255AF54900C9181F /* BookmarkedPostListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45C847B255AF54900C9181F /* BookmarkedPostListController.swift */; };
 		C48C9C57254A1707007EB11A /* PostPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48C9C56254A1707007EB11A /* PostPresentation.swift */; };
 		C48D8F6C255079B9004742FA /* formatCount.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48D8F6B255079B9004742FA /* formatCount.swift */; };
 		C48D8F6E25508B57004742FA /* SinglePostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48D8F6D25508B56004742FA /* SinglePostViewModel.swift */; };
@@ -113,6 +114,7 @@
 		C4563D3E2549FABB00FAB781 /* PostPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostPreview.swift; sourceTree = "<group>"; };
 		C4563D422549FBFB00FAB781 /* PostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostView.swift; sourceTree = "<group>"; };
 		C45C8479255AE05000C9181F /* EventEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventEmitter.swift; sourceTree = "<group>"; };
+		C45C847B255AF54900C9181F /* BookmarkedPostListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkedPostListController.swift; sourceTree = "<group>"; };
 		C48C9C56254A1707007EB11A /* PostPresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostPresentation.swift; sourceTree = "<group>"; };
 		C48D8F6B255079B9004742FA /* formatCount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = formatCount.swift; sourceTree = "<group>"; };
 		C48D8F6D25508B56004742FA /* SinglePostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SinglePostViewModel.swift; sourceTree = "<group>"; };
@@ -280,6 +282,7 @@
 				C4DDFCC6254F6C9A0099BFA6 /* LabeledButton.swift */,
 				C4C23D7225585C5F00D48DB3 /* PostListViewController.swift */,
 				C4C23D7425585E1D00D48DB3 /* PostTableViewCell.swift */,
+				C45C847B255AF54900C9181F /* BookmarkedPostListController.swift */,
 				C4BA82882559D8A500FFFDEF /* DetailPostViewController.swift */,
 			);
 			path = Views;
@@ -458,6 +461,7 @@
 				C4DDFCB6254F05C10099BFA6 /* ApplicationIcon.swift in Sources */,
 				C4563D432549FBFB00FAB781 /* PostView.swift in Sources */,
 				C4563D262549F23B00FAB781 /* PostID.swift in Sources */,
+				C45C847C255AF54900C9181F /* BookmarkedPostListController.swift in Sources */,
 				C4D620EA255ADD21004740B5 /* ApplicationObserved.swift in Sources */,
 				C48D8F6E25508B57004742FA /* SinglePostViewModel.swift in Sources */,
 				C4BA8285255946B700FFFDEF /* PostListViewModel.swift in Sources */,
