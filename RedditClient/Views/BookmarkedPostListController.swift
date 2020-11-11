@@ -20,12 +20,14 @@ class BookmarkedPostListController : UITableViewController {
             self.tableView.reloadData()
         }
     }
-
-    @objc
-    private func navigateToBookmarks() {
-        print("Nav")
-    }
     
+    private func onData(ofUpdatedPost post: Post) {
+        DispatchQueue.main.async {
+            // TODO: reload only one cell
+            self.tableView.reloadData()
+        }
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.register(PostTableViewCell.self, forCellReuseIdentifier: Self.reuseIndentifier)
@@ -41,10 +43,16 @@ class BookmarkedPostListController : UITableViewController {
         
         navigationItem.title = "Bookmarks"
 
-        bookmarksViewModel = PostBookmarksViewModel(onBookmarked: { [weak self] (id, bookmarked) in
-            guard let self = self else { return }
-            self.onData(ofPosts: self.bookmarksViewModel.posts)
-        })
+        bookmarksViewModel = PostBookmarksViewModel(
+            onBookmarked: { [weak self] (id, bookmarked) in
+                guard let self = self else { return }
+                self.onData(ofPosts: self.bookmarksViewModel.posts)
+            },
+            onUpdate: { [weak self] (post) in
+                self?.onData(ofUpdatedPost: post)
+            }
+        )
+        bookmarksViewModel.refreshBookmarks()
         
         onData(ofPosts: bookmarksViewModel.posts)
         

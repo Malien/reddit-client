@@ -12,7 +12,6 @@ class SinglePostViewController: UIViewController {
     
     @ThreadSafe(queueTarget: DispatchQueue.main)
     var postView: PostView? = nil
-    var subscription: SubscriptionHolder?
     let scroll = UIScrollView().autolayouted()
 
     var viewModel: SinglePostViewModel! = nil

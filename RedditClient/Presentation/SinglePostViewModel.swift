@@ -10,7 +10,7 @@ import Foundation
 
 class SinglePostViewModel {
     
-    var subscription: SubscriptionHolder
+    var subscription: Cancellable
     var bookmarked: Bool = false {
         didSet {
             bookmarkHandler(bookmarked)
@@ -20,7 +20,7 @@ class SinglePostViewModel {
     
     init(subreddit: Subreddit, onPost: @escaping (Post) -> Void, onBookmark: @escaping (Bool) -> Void) {
         bookmarkHandler = onBookmark
-        subscription = ApplicationServices.reddit.topPosts(from: subreddit, limit: 1) { result in
+        subscription = ApplicationServices.shared.reddit.topPosts(from: subreddit, limit: 1, force: true) { result in
             switch result {
             case .success(let posts):
                 if let post = posts.items.first {
@@ -35,7 +35,7 @@ class SinglePostViewModel {
     }
     
     deinit {
-        subscription.unsubscribe()
+        subscription.cancel()
     }
     
 }

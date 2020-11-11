@@ -1,7 +1,8 @@
 import Foundation
 
 /// Type to differenciate in code between PostID, CommentID etc.
-struct PostID: Hashable {
+struct PostID: Hashable, EntityIdentifier {
+    typealias Entity = Post
     let id: String
     init(_ id: String) { self.id = id }
 }

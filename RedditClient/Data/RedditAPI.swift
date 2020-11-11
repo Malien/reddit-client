@@ -9,8 +9,30 @@ extension URL {
     }
 }
 
+extension RedditEntity where Self: Keyable, Self.Key: EntityIdentifier, Self.Key.Entity == Self {
+    static func paginate(components: inout URLComponents, limit: Int?, after: Key?) {
+        var queryItems: [URLQueryItem] = []
+        if let limit = limit {
+            queryItems.append(URLQueryItem(name: "limit", value: limit.description))
+        }
+        if let after = after {
+            queryItems.append(URLQueryItem(name: "after", value: after.fullname))
+        }
+        if components.queryItems != nil {
+            components.queryItems!.append(contentsOf: queryItems)
+        } else {
+            components.queryItems = queryItems
+        }
+    }
+
+}
+
 protocol Cancellable {
     mutating func cancel()
+}
+
+extension Array: Cancellable where Element == Cancellable {
+    mutating func cancel() { mutateEach { $0.cancel() } }
 }
 
 /// It can be a class, but this is basically URL wrapper with a few methods.
@@ -202,7 +224,7 @@ struct RedditAPI {
             completionHandler(result.map(transform))
         }
     }
-
+    
     // MARK: API Calls
 
     /// Fetch top posts from the subreddit specified.
@@ -211,9 +233,9 @@ struct RedditAPI {
     ///     - limit: maximum amount of entries to be fetched. Optional
     ///     - after: id of an entity used to set initial fetching point. Used for pagination. Optional
     ///     - completionHandler: function that will run asynchronously with the result of the operation.
-    ///                          In case of successfull operation, handler will be called with `Result.success([Link])`.
+    ///                          In case of successfull operation, handler will be called with `Result.success(Listing<Post>)`.
     ///                          Otherwise, in case of an error, handler will be called with `Result.failure(RedditAPI.Error)`
-    /// - Returns: RedditAPI.Cancellable which can be used to cancel request
+    /// - Returns: `Cancellable` which can be used to cancel request
     /// - Note: If provided url component will result in invalid url, `completionHandler` will be called synchronously
     ///         with `Result.failure(RedditAPI.Error.invalidURL)` and fetch iteself will return `nil`
     @discardableResult
@@ -223,18 +245,64 @@ struct RedditAPI {
     ) -> Cancellable {
         var components = URLComponents()
         components.path = "/r/\(subreddit)/top.json"
-        var queryItems: [URLQueryItem] = []
-        if let limit = limit {
-            queryItems.append(URLQueryItem(name: "limit", value: limit.description))
-        }
-        if let after = after {
-            queryItems.append(URLQueryItem(name: "after", value: "\(Post.kind)_\(after)"))
-        }
-        components.queryItems = queryItems
+        Post.paginate(components: &components, limit: limit, after: after)
 
         return fetchMap(from: components, completionHandler: completionHandler) {
-            (result: Kinded<Listing<Post>>) in
-            result.inner
+            (result: Kinded<Listing<Post>>) in result.inner
+        }
+    }
+    
+    /// Fetch a single post with id specified
+    /// - Parameters:
+    ///     - withdID: id of a post to be retrieved
+    ///     - completionHandler: function that will run asynchronously with the result of the operation.
+    ///                          In case of successfull operation, handler will be called with `Result.success(Post)`.
+    ///                          Otherwise, in case of an error, handler will be called with `Result.failure(RedditAPI.Error)`
+    /// - Returns: `Cancellable` which can be used to cancel request
+    /// - Note: If provided url component will result in invalid url, `completionHandler` will be called synchronously
+    ///         with `Result.failure(RedditAPI.Error.invalidURL)` and fetch iteself will return `nil`
+    @discardableResult
+    public func post(withID id: PostID, completionHandler: @escaping (Result<Post, Error>) -> Void) -> Cancellable {
+        var components = URLComponents()
+        components.path = "/by_id/\(id.fullname).json"
+        
+        return fetch(from: components) { (result: Result<Kinded<Listing<Post>>, Error>) in
+            let newRes: Result<Post, Error> = result.flatMap { kinded in
+                if let post = kinded.inner.children.first {
+                    return .success(post.inner)
+                } else {
+                    return .failure(.serverResponse(.notFound(message: "On request of post(withID: \(id)) empty listing returned")))
+                }
+            }
+            completionHandler(newRes)
+        }
+    }
+    
+    /// Fetch top posts from the subreddit specified.
+    /// - Parameters:
+    ///     - withIDs: list of post ids to be retrieved
+    ///     - limit: maximum amount of entries to be fetched. Optional
+    ///     - after: id of an entity used to set initial fetching point. Used for pagination. Optional
+    ///     - completionHandler: function that will run asynchronously with the result of the operation.
+    ///                          In case of successfull operation, handler will be called with `Result.success(Listing<Post>)`.
+    ///                          Otherwise, in case of an error, handler will be called with `Result.failure(RedditAPI.Error)`
+    /// - Returns: `Cancellable` which can be used to cancel request
+    /// - Note: If provided url component will result in invalid url, `completionHandler` will be called synchronously
+    ///         with `Result.failure(RedditAPI.Error.invalidURL)` and fetch iteself will return `nil`
+    @discardableResult
+    public func posts(
+        withIDs ids: [PostID],
+        limit: Int? = nil,
+        after: PostID? = nil,
+        completionHandler: @escaping (Result<Listing<Post>, Error>) -> Void
+    ) -> Cancellable {
+        var components = URLComponents()
+        let idsString = ids.map { $0.fullname }.joined(separator: ",")
+        components.path = "/by_id/\(idsString).json"
+        Post.paginate(components: &components, limit: limit, after: after)
+
+        return fetchMap(from: components, completionHandler: completionHandler) {
+            (result: Kinded<Listing<Post>>) in result.inner
         }
     }
 

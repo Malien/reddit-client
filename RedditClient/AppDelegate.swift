@@ -17,13 +17,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
+        // statics init
+        _ = ApplicationServices.version
+        ApplicationServices.loadFromDisk()
+        
         window = UIWindow(frame: UIScreen.main.bounds)
-//        let controller = SinglePostViewController()
-//        let controller = DetailPostViewController()
-        let controller = PostListViewController(subreddit: "ios")
+        let controller = PostListViewController(subreddit: "AskMen")
         let navigation = UINavigationController(rootViewController: controller)
         window!.rootViewController = navigation
         window!.makeKeyAndVisible()
+        
         return true
     }
 

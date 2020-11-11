@@ -10,10 +10,10 @@ import Foundation
 
 class PostListViewModel {
     
-    private var subscription: SubscriptionHolder
+    private var subscription: Cancellable
 
     init(subreddit: Subreddit, onPosts: @escaping (PaginationContainer<Post>) -> Void) {
-        subscription = ApplicationServices.reddit.topPosts(from: subreddit, limit: 5) { result in
+        subscription = ApplicationServices.shared.reddit.topPosts(from: subreddit, limit: 5, force: true) { result in
             switch result {
             case .success(let posts):
                 onPosts(posts)
@@ -24,7 +24,7 @@ class PostListViewModel {
     }
     
     deinit {
-        subscription.unsubscribe()
+        subscription.cancel()
     }
     
 }

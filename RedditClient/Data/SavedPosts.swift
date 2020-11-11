@@ -12,26 +12,28 @@ struct SavedPosts {
     private(set) var posts: [Post] = []
     private var ids: Set<PostID> = []
     
-    enum Event {
-        case added(Post)
-        case removed(Post)
+    enum EventType {
+        case added
+        case updated
+        case removed
     }
     
+    typealias Event = (post: Post, type: EventType)
     typealias EE = EventEmitter<Event, Self>
     var eventEmitter: EE = EventEmitter(queue: ApplicationServices.dataQueue)
     
     private mutating func add(nonexistantPost post: Post) {
         posts.append(post)
         ids.insert(post.id)
-        eventEmitter.emit(event: .added(post))
+        eventEmitter.emit(event: (post, .added))
     }
     
     private mutating func remove(existingPostWithID id: PostID) {
         ids.remove(id)
         let idx = posts.firstIndex { $0.id == id }
         if let idx = idx {
-            let removed = posts.remove(at: idx)
-            eventEmitter.emit(event: .removed(removed))
+            let post = posts.remove(at: idx)
+            eventEmitter.emit(event: (post, .removed))
         }
     }
 
@@ -66,6 +68,15 @@ struct SavedPosts {
     mutating func unsubscribe(_ subscription: EE.SubID) {
         eventEmitter.unsubscribe(subscription)
     }
+    
+    mutating func update(postWithID id: PostID, to post: Post) {
+        if ids.contains(id) {
+            if let idx = posts.firstIndex(where: { $0.id == id }) {
+                posts[idx] = post
+                eventEmitter.emit(event: (post, .updated))
+            }
+        }
+    }
 }
 
 extension SavedPosts: Codable {
@@ -80,3 +91,5 @@ extension SavedPosts: Codable {
         self.ids = Set(posts.map { $0.id })
     }
 }
+
+extension SavedPosts: EventSource { }

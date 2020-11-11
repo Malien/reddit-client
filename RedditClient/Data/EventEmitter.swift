@@ -8,7 +8,14 @@
 
 import Foundation
 
-struct EventEmitter<Event, Subscription> {
+protocol EventSource {
+    associatedtype Event
+    associatedtype SubID
+    mutating func subscribe(_ listener: @escaping (Event) -> Void) -> SubID
+    mutating func unsubscribe(_ subscription: SubID)
+}
+
+struct EventEmitter<Event, Subscription>: EventSource {
     let queue: DispatchQueue
     
     init(queue: DispatchQueue) {

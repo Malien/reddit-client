@@ -7,17 +7,15 @@ extension Array {
 
 // TODO: Add timed expiration
 /// Expected to be used with value types as keys are being wrapped into class wrappers
-struct Cache<Key, Entity> where Key: Hashable {
+struct Cache<Key, Entity>: EventSource where Key: Hashable {
 
     // MARK: Inner types
     enum Event {
-        case added(Entity)
-        case updated(newValue: Entity, oldValue: Entity)
-        case removed(oldValue: Entity)
-        case expired(oldValue: Entity)
+        case removed(key: Key)
+        case updated(key: Key, newValue: Entity)
     }
 
-    typealias Listener = (Event) -> Void
+    typealias Listener = (ObservedEntity.EntityChangeEvent) -> Void
     
     typealias SubID = SubscriptionID<Self>
 
@@ -39,7 +37,14 @@ struct Cache<Key, Entity> where Key: Hashable {
         private(set) var item: Entity?
         let key: Key
         
-        typealias EE = EventEmitter<Event, Cache<Key, Entity>>
+        enum EntityChangeEvent {
+            case added(Entity)
+            case updated(newValue: Entity, oldValue: Entity)
+            case removed(oldValue: Entity)
+            case expired(oldValue: Entity)
+        }
+        
+        typealias EE = EventEmitter<EntityChangeEvent, Cache<Key, Entity>>
         var eventEmitter: EE = EventEmitter(queue: ApplicationServices.cacheQueue)
 
         init(key: Key, item: Entity? = nil) {
@@ -101,6 +106,7 @@ struct Cache<Key, Entity> where Key: Hashable {
         wrappedValue: NSCache<WrappedKey, ObservedEntity>(), queueTarget: ApplicationServices.cacheQueue)
     private var storage
     private let delegate = CacheDelegate()
+    private var eventEmitter = EventEmitter<Event, Self>(queue: ApplicationServices.cacheQueue)
 
     private subscript(entryFor key: WrappedKey) -> ObservedEntity? {
         get {
@@ -127,7 +133,10 @@ struct Cache<Key, Entity> where Key: Hashable {
             let wrapped = WrappedKey(key)
             let entry = storage.object(forKey: wrapped)
             guard let newValue = newValue else {
-                entry?.remove()
+                if entry != nil {
+                    entry!.remove()
+                    eventEmitter.emit(event: .removed(key: key))
+                }
                 self[entryFor: wrapped] = nil
                 //                removeEntry(forKey: wrapped)
                 return
@@ -135,6 +144,7 @@ struct Cache<Key, Entity> where Key: Hashable {
             let previous = entry ?? ObservedEntity(key: key)
             delegate.keys.insert(key)
             previous.update(newValue: newValue)
+            eventEmitter.emit(event: .updated(key: key, newValue: newValue))
             self[entryFor: wrapped] = previous
             //            setEntry(previous, forKey: wrapped)
         }
@@ -155,6 +165,14 @@ struct Cache<Key, Entity> where Key: Hashable {
 
     mutating func unsubscribe(from key: Key, subscription: SubID) {
         storage.object(forKey: WrappedKey(key))?.unsubscribe(subscription)
+    }
+    
+    mutating func subscribe(_ callback: @escaping (Event) -> Void) -> SubID {
+        eventEmitter.subscribe(callback)
+    }
+    
+    mutating func unsubscribe(_ subscription: SubID) {
+        eventEmitter.unsubscribe(subscription)
     }
 }
 
