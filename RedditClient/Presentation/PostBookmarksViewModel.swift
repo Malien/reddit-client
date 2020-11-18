@@ -12,8 +12,32 @@ class PostBookmarksViewModel {
     
     private let bookmarksSub: SubscriptionID<SavedPosts>
     private var refreshSubs: [Cancellable] = []
+    private let handleSearch: Optional<() -> Void>
+    private var _filter: String? = nil
+    var filter: String? {
+        get { _filter }
+        set {
+            if let filter = newValue {
+                filteredPosts = posts.filter {
+                    $0.title.localizedCaseInsensitiveContains(filter) ||
+                    $0.selfText.localizedCaseInsensitiveContains(filter) ||
+                    $0.author?.localizedCaseInsensitiveContains(filter) ?? false ||
+                    $0.subreddit.name.localizedCaseInsensitiveContains(filter)
+                }
+                print("filteredPosts: \(filteredPosts)")
+            }
+            if let handleSearch = handleSearch, _filter != newValue {
+                _filter = newValue
+                handleSearch()
+            } else {
+                _filter = newValue
+            }
+        }
+    }
+    private var filteredPosts: [Post] = []
     
-    init(onBookmarked: @escaping (PostID, Bool) -> Void, onUpdate: Optional<(Post) -> Void> = nil) {
+    init(onBookmarked: @escaping (PostID, Bool) -> Void, onUpdate: Optional<(Post) -> Void> = nil, onSearch: Optional<() -> Void> = nil) {
+        self.handleSearch = onSearch
         bookmarksSub = ApplicationServices.shared.store.saved.subscribe {
             let (post, event) = $0
             switch event {
@@ -56,5 +80,6 @@ class PostBookmarksViewModel {
         refreshSubs.append(sub)
     }
     
-    var posts: [Post] { ApplicationServices.shared.store.saved.posts }
+    var posts: [Post] { filter == nil ? ApplicationServices.shared.store.saved.posts : filteredPosts }
+
 }

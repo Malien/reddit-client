@@ -11,7 +11,7 @@ final class ApplicationStore {
     private var topPostsSub: Cache<TopPostsRequest, PaginationContainer<Post>>.SubID! = nil
     #endif
     private var savedSub: SavedPosts.SubID! = nil
-    private(set) var initiateSave: (() -> Void) = {}
+    private(set) var initiateSave: () -> Void = {}
     
     init(
         subredditTopPosts: Cache<TopPostsRequest, PaginationContainer<Post>> = Cache(),

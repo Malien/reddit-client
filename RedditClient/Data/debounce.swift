@@ -9,12 +9,12 @@
 import Foundation
 
 func debounce(timeout: DispatchTimeInterval, queue: DispatchQueue, closure: @escaping () -> Void) -> (() -> Void) {
-    var searchTask: DispatchWorkItem?
+    var awaitedTask: DispatchWorkItem?
     
     let timeouted = {
-        searchTask?.cancel()
+        awaitedTask?.cancel()
         let task = DispatchWorkItem(block: closure)
-        searchTask = task
+        awaitedTask = task
         queue.asyncAfter(deadline: DispatchTime.now() + timeout, execute: task)
     }
     

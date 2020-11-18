@@ -8,30 +8,63 @@
 
 import UIKit
 
-class BookmarkedPostListController : UITableViewController {
+class BookmarkedPostListController : UITableViewController, UISearchResultsUpdating {
     static let reuseIndentifier = "postCell"
     
     private var posts: [Post] = []
     private var bookmarksViewModel: PostBookmarksViewModel! = nil
     
+    private let searchController = UISearchController(searchResultsController: nil)
+    
+    private var updateSearchTask: DispatchWorkItem? = nil
+    
     private func onData(ofPosts posts: [Post]) {
-        DispatchQueue.main.async {
+        // TBH I preemptively set [weak self] cause who knows when async fill fire (even on main thread)
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
             self.posts = posts
             self.tableView.reloadData()
         }
     }
     
     private func onData(ofUpdatedPost post: Post) {
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
             // TODO: reload only one cell
+            guard let self = self else { return }
+            self.posts = self.bookmarksViewModel.posts
             self.tableView.reloadData()
         }
+    }
+    
+    private func onDataOfSearch() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.posts = self.bookmarksViewModel.posts
+            self.tableView.reloadData()
+        }
+    }
+    
+    static let searchUpdateTimeout = DispatchTimeInterval.milliseconds(600)
+    func updateSearchResults(for searchController: UISearchController) {
+        var text = searchController.searchBar.text?.lowercased().trimmingCharacters(in: .whitespaces)
+        if text == "" {
+            text = nil
+        }
+        print("Updated: \(text)")
+        
+        updateSearchTask?.cancel()
+        let task = DispatchWorkItem { [weak self] in
+            print("Set filter to \(text)")
+            self?.bookmarksViewModel.filter = text
+        }
+        updateSearchTask = task
+        ApplicationServices.dataQueue.asyncAfter(deadline: DispatchTime.now() + Self.searchUpdateTimeout, execute: task)
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.register(PostTableViewCell.self, forCellReuseIdentifier: Self.reuseIndentifier)
-        
+
         let bgView = UIView()
         bgView.backgroundColor = .background
         tableView.backgroundView = bgView
@@ -42,6 +75,10 @@ class BookmarkedPostListController : UITableViewController {
         tableView.separatorStyle = .none
         
         navigationItem.title = "Bookmarks"
+        navigationItem.searchController = searchController
+        
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
 
         bookmarksViewModel = PostBookmarksViewModel(
             onBookmarked: { [weak self] (id, bookmarked) in
@@ -50,6 +87,9 @@ class BookmarkedPostListController : UITableViewController {
             },
             onUpdate: { [weak self] (post) in
                 self?.onData(ofUpdatedPost: post)
+            },
+            onSearch: { [weak self] in
+                self?.onDataOfSearch()
             }
         )
         bookmarksViewModel.refreshBookmarks()
