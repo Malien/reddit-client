@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         ApplicationServices.loadFromDisk()
         
         window = UIWindow(frame: UIScreen.main.bounds)
-        let controller = PostListViewController(subreddit: "AskMen")
+        let controller = PostListViewController(subreddit: "ios")
         let navigation = UINavigationController(rootViewController: controller)
         window!.rootViewController = navigation
         window!.makeKeyAndVisible()

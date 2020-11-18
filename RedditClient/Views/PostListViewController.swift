@@ -113,6 +113,11 @@ class PostListViewController: UITableViewController {
         cell.onBookmark = { [weak self] in
             self?.bookmarksViewModel.toggle(bookmarkOfPost: post)
         }
+        cell.onShare = { [weak self] in
+            guard let self = self else { return }
+            let shareSheet = UIActivityViewController(activityItems: [post.url], applicationActivities: nil)
+            self.present(shareSheet, animated: true, completion: nil)
+        }
         cell.populate(post: post)
         cell.populate(bookmarked: bookmarksViewModel.isBookmarked(postWithID: post.id))
 

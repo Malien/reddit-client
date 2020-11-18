@@ -12,8 +12,10 @@ class DetailPostViewController: UIViewController {
     
     let scrollView = UIScrollView().autolayouted()
     let postView: PostView
+    let post: Post
 
     init(post: Post) {
+        self.post = post
         postView = PostView(post: post).autolayouted()
         super.init(nibName: nil, bundle: nil)
     }
@@ -24,6 +26,12 @@ class DetailPostViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .background
         navigationItem.title = "Post"
+        
+        postView.onShare = { [weak self] in
+            guard let self = self else { return }
+            let shareSheet = UIActivityViewController(activityItems: [self.post.url], applicationActivities: nil)
+            self.present(shareSheet, animated: true, completion: nil)
+        }
         
         scrollView.addSubview(postView)
         view.addSubview(scrollView)
