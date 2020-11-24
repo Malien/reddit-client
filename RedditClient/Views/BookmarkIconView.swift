@@ -46,6 +46,10 @@ final class BookmarkIconView: UIView {
         drawing.lineWidth = lineWidth
         drawing.lineJoin = .round
         
+        drawing.shadowColor = UIColor.black.cgColor
+        drawing.shadowRadius = 10
+        drawing.shadowOpacity = 0.2
+        
         layer.opacity = 0
         
         layer.addSublayer(drawing)
