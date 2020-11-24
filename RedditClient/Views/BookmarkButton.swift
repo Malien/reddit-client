@@ -8,7 +8,7 @@
 
 import UIKit
 
-class BookmarkButton: UIButton {
+final class BookmarkButton: UIButton {
     
     private let icon = UIImageView().autolayouted()
     private let label = UILabel().autolayouted()

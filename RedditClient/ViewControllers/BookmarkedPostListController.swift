@@ -8,7 +8,7 @@
 
 import UIKit
 
-class BookmarkedPostListController : UITableViewController, UISearchResultsUpdating {
+final class BookmarkedPostListController : UITableViewController, UISearchResultsUpdating {
     static let reuseIndentifier = "postCell"
     
     private var posts: [Post] = []
@@ -50,11 +50,9 @@ class BookmarkedPostListController : UITableViewController, UISearchResultsUpdat
         if text == "" {
             text = nil
         }
-        print("Updated: \(text)")
-        
+
         updateSearchTask?.cancel()
         let task = DispatchWorkItem { [weak self] in
-            print("Set filter to \(text)")
             self?.bookmarksViewModel.filter = text
         }
         updateSearchTask = task
@@ -121,6 +119,9 @@ class BookmarkedPostListController : UITableViewController, UISearchResultsUpdat
         }
         cell.onBookmark = { [weak self] in
             self?.bookmarksViewModel.toggle(bookmarkOfPost: post)
+        }
+        cell.onDoubleTap = { [weak self] in
+            self?.bookmarksViewModel.bookmark(post: post)
         }
         cell.populate(post: post)
         cell.populate(bookmarked: bookmarksViewModel.isBookmarked(postWithID: post.id))

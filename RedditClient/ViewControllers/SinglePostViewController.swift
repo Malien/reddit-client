@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SinglePostViewController: UIViewController {
+final class SinglePostViewController: UIViewController {
     
     @ThreadSafe(queueTarget: DispatchQueue.main)
     var postView: PostView? = nil

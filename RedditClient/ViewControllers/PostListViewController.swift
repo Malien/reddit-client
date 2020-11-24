@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PostListViewController: UITableViewController {
+final class PostListViewController: UITableViewController {
     
     static let reuseIndentifier = "postCell"
     
@@ -82,10 +82,6 @@ class PostListViewController: UITableViewController {
     private func selected(commentsOfPost post: Post) {
         navigationController?.pushViewController(DetailPostViewController(post: post), animated: true)
     }
-    
-    private func on(_ post: Post, bookmarkStatus: Bool) {
-        bookmarksViewModel.bookmark(post: post)
-    }
 
     // MARK: - Table view data source
 
@@ -117,6 +113,9 @@ class PostListViewController: UITableViewController {
             guard let self = self else { return }
             let shareSheet = UIActivityViewController(activityItems: [post.url], applicationActivities: nil)
             self.present(shareSheet, animated: true, completion: nil)
+        }
+        cell.onDoubleTap = { [weak self] in
+            self?.bookmarksViewModel.bookmark(post: post)
         }
         cell.populate(post: post)
         cell.populate(bookmarked: bookmarksViewModel.isBookmarked(postWithID: post.id))

@@ -8,11 +8,12 @@
 
 import UIKit
 
-class DetailPostViewController: UIViewController {
+final class DetailPostViewController: UIViewController {
     
     let scrollView = UIScrollView().autolayouted()
     let postView: PostView
     let post: Post
+    var bookmarksViewModel: PostBookmarksViewModel!
 
     init(post: Post) {
         self.post = post
@@ -22,16 +23,39 @@ class DetailPostViewController: UIViewController {
     
     required init?(coder: NSCoder) { nil }
     
+    func onData(ofPostBookmarked bookmarked: Bool) {
+        DispatchQueue.main.async {
+            self.postView.populate(bookmarked: bookmarked)
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .background
         navigationItem.title = "Post"
+        
+        bookmarksViewModel = PostBookmarksViewModel( onBookmarked: { [weak self] (postID, bookmarked) in
+            guard let self = self else { return }
+            if postID == self.post.id {
+                self.onData(ofPostBookmarked: bookmarked)
+            }
+        })
         
         postView.onShare = { [weak self] in
             guard let self = self else { return }
             let shareSheet = UIActivityViewController(activityItems: [self.post.url], applicationActivities: nil)
             self.present(shareSheet, animated: true, completion: nil)
         }
+        postView.onDoubleTap = { [weak self] in
+            guard let self = self else { return }
+            self.bookmarksViewModel.bookmark(post: self.post)
+        }
+        postView.onBookmark = { [weak self] in
+            guard let self = self else { return }
+            self.bookmarksViewModel.toggle(bookmarkOfPost: self.post)
+        }
+        
+        postView.populate(bookmarked: bookmarksViewModel.isBookmarked(postWithID: post.id))
         
         scrollView.addSubview(postView)
         view.addSubview(scrollView)

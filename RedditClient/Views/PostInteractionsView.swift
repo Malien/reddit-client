@@ -8,11 +8,11 @@
 
 import UIKit
 
-class PostInteractionsView : UIView {
+final class PostInteractionsView : UIView {
     
     private let votes: UpvoteView
-    private let comments = LabeledButton(icon: ApplicationIcon.comments, label: "4").autolayouted()
-    private let share = LabeledButton(icon: ApplicationIcon.share ,label: "Share").autolayouted()
+    private let comments: LabeledButton
+    private let share: LabeledButton
     
     public var onComment: Optional<() -> Void> {
         set { comments.onClick = newValue }
@@ -27,8 +27,10 @@ class PostInteractionsView : UIView {
         get { votes.onClick }
     }
 
-    init(votes voteCount: Int) {
+    init(votes voteCount: Int, comments commentCount: Int) {
         votes = UpvoteView(votes: voteCount).autolayouted()
+        comments = LabeledButton(icon: ApplicationIcon.comments, label: commentCount.description).autolayouted()
+        share = LabeledButton(icon: ApplicationIcon.share ,label: "Share").autolayouted()
         super.init(frame: CGRect.zero)
         
         directionalLayoutMargins = NSDirectionalEdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
@@ -79,6 +81,10 @@ class PostInteractionsView : UIView {
     
     func populate(votes voteCount: Int) {
         votes.populate(votes: voteCount)
+    }
+    
+    func populate(comments commentCount: Int) {
+        comments.populate(label: commentCount.description)
     }
     
     required init?(coder: NSCoder) { nil }

@@ -46,6 +46,10 @@ class LabeledButton : UIButton {
         ])
     }
     
+    func populate(label: String?) {
+        self.label.text = label
+    }
+    
     required init?(coder: NSCoder) { nil }
     
     @objc

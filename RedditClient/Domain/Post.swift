@@ -36,7 +36,7 @@ struct Post: RedditEntity, Identifiable, Keyable {
     let hidden: Bool
     let isSelf: Bool
     let locked: Bool
-    let numComents: Int
+    let commentCount: Int
     let over18: Bool
     let permalink: URL
     let saved: Bool
@@ -72,7 +72,7 @@ struct Post: RedditEntity, Identifiable, Keyable {
         case hidden
         case isSelf = "is_self"
         case locked
-        case numComents = "num_comments"
+        case commentCount = "num_comments"
         case over18 = "over_18"
         case permalink
         case saved

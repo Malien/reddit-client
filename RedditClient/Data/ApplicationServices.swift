@@ -9,7 +9,7 @@
 import Foundation
 import os
 
-class ApplicationServices {
+final class ApplicationServices {
     static let dataQueue = DispatchQueue(label: "ua.edu.ukma.ios.Reddit.Data", qos: .utility)
     static let cacheQueue = DispatchQueue(label: "ua.edu.ukma.ios.Reddit.Cache", qos: .utility, target: ApplicationServices.dataQueue)
     static let ioQueue = DispatchQueue(label: "ua.edu.ukma.ios.Reddit.io", qos: .background)

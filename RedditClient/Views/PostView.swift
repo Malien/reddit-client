@@ -9,21 +9,20 @@
 import UIKit
 import SDWebImage
 
-class PostView : UIView {
+final class PostView : UIView {
     
     private let header: PostHeaderView
     // TODO: Come up with declarative way of handling appearing and disappearing views
-    private let thumbnail = UIImageView().autolayouted()
-    private var thumbnailHeightConstraint: NSLayoutConstraint
+    private let thumbnail: PostThumbnailView
     private let selftext = UILabel().autolayouted()
     private let bookmarkButton: BookmarkButton
     private let interactionsView: PostInteractionsView
 
     init(post: Post?, bookmarked: Bool = false, onBookmark: @escaping () -> Void = { }) {
         header = PostHeaderView(post: post).autolayouted()
-        thumbnailHeightConstraint = NSLayoutConstraint(item: thumbnail, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant: 0)
+        thumbnail = PostThumbnailView(imageFromSource: post?.preview?.images.first?.source).autolayouted()
         bookmarkButton = BookmarkButton(bookmarked: bookmarked, onClick: onBookmark).autolayouted()
-        interactionsView = PostInteractionsView(votes: post?.score ?? 0).autolayouted()
+        interactionsView = PostInteractionsView(votes: post?.score ?? 0, comments: post?.commentCount ?? 0).autolayouted()
         super.init(frame: CGRect.zero)
 
         populate(post: post)
@@ -84,6 +83,10 @@ class PostView : UIView {
         set { bookmarkButton.onClick = newValue }
         get { bookmarkButton.onClick }
     }
+    public var onDoubleTap: Optional<() -> Void> {
+        set { thumbnail.onDoubleTap = newValue }
+        get { thumbnail.onDoubleTap }
+    }
         
     public func populate(bookmarked: Bool) {
         bookmarkButton.updateBookmark(bookmarked: bookmarked)
@@ -93,41 +96,10 @@ class PostView : UIView {
         header.populate(dataFrom: post)
         selftext.text = post?.selfText
         interactionsView.populate(votes: post?.score ?? 0)
-        if let preview = post?.preview, let image = preview.images.first {
-            let multiplier = CGFloat(image.source.height) / CGFloat(image.source.width)
-            self.thumbnailHeightConstraint.isActive = false
-            self.thumbnailHeightConstraint = NSLayoutConstraint(
-                item: self.thumbnail,
-                attribute: .height,
-                relatedBy: .equal,
-                toItem: self.thumbnail,
-                attribute: .width,
-                multiplier: multiplier,
-                constant: 0
-            )
-            self.thumbnailHeightConstraint.isActive = true
-            thumbnail.sd_setImage(with: image.source.url)
-        } else {
-            thumbnail.image = nil
-            self.thumbnailHeightConstraint.isActive = false
-            self.thumbnailHeightConstraint = NSLayoutConstraint(
-                item: self.thumbnail,
-                attribute: .height,
-                relatedBy: .equal,
-                toItem: nil,
-                attribute: .height,
-                multiplier: 1,
-                constant: 0
-            )
-            self.thumbnailHeightConstraint.isActive = true
-        }
+        interactionsView.populate(comments: post?.commentCount ?? 0)
+        thumbnail.populate(imageFromSource: post?.preview?.images.first?.source)
     }
     
-    required init?(coder: NSCoder) {
-        return nil
-//        header = PostHeaderView(coder: coder)!
-//        thumbnailHeightConstraint = NSLayoutConstraint(item: thumbnail, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant: 0)
-//        super.init(coder: coder)
-    }
+    required init?(coder: NSCoder) { nil }
     
 }

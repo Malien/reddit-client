@@ -8,7 +8,7 @@
 
 import UIKit
 
-class UpvoteView : UIButton {
+final class UpvoteView : UIButton {
     
     let icon = UIImageView().autolayouted()
     let label = UILabel().autolayouted()

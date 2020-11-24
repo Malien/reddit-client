@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PostHeaderView : UIView {
+final class PostHeaderView : UIView {
     
     let username = UILabel().autolayouted()
     let timestamp = UILabel().autolayouted()

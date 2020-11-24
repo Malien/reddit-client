@@ -8,7 +8,7 @@
 
 import Foundation
 
-class PostBookmarksViewModel {
+final class PostBookmarksViewModel {
     
     private let bookmarksSub: SubscriptionID<SavedPosts>
     private var refreshSubs: [Cancellable] = []

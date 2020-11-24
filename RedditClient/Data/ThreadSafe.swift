@@ -1,6 +1,6 @@
 import Foundation
 
-@propertyWrapper class ThreadSafe<T> {
+@propertyWrapper final class ThreadSafe<T> {
     let queue: DispatchQueue
     var value: T
 

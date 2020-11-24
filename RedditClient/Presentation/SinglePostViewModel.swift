@@ -8,7 +8,7 @@
 
 import Foundation
 
-class SinglePostViewModel {
+final class SinglePostViewModel {
     
     var subscription: Cancellable
     var bookmarked: Bool = false {

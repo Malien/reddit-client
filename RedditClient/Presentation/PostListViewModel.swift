@@ -8,7 +8,7 @@
 
 import Foundation
 
-class PostListViewModel {
+final class PostListViewModel {
     
     private var subscription: Cancellable
 

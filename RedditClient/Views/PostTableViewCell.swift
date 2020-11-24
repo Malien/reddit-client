@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PostTableViewCell: UITableViewCell {
+final class PostTableViewCell: UITableViewCell {
     
     private let postView = PostView(post: nil).autolayouted()
     
@@ -27,6 +27,10 @@ class PostTableViewCell: UITableViewCell {
     public var onBookmark: Optional<() -> Void> {
         set { postView.onBookmark = newValue }
         get { postView.onBookmark }
+    }
+    public var onDoubleTap: Optional<() -> Void> {
+        set { postView.onDoubleTap = newValue }
+        get { postView.onDoubleTap }
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
