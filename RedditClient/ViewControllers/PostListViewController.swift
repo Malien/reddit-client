@@ -13,8 +13,8 @@ final class PostListViewController: UITableViewController {
     static let reuseIndentifier = "postCell"
     
     private var posts: PaginationContainer<Post>? = nil
-    private var postListViewModel: PostListViewModel! = nil
-    private var bookmarksViewModel: PostBookmarksViewModel! = nil
+    private var postListViewModel: PostListViewModel!
+    private var bookmarksViewModel: PostBookmarksViewModel!
     
     let subreddit: Subreddit
     

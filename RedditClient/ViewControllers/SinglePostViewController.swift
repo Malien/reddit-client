@@ -14,7 +14,7 @@ final class SinglePostViewController: UIViewController {
     var postView: PostView? = nil
     let scroll = UIScrollView().autolayouted()
 
-    var viewModel: SinglePostViewModel! = nil
+    var viewModel: SinglePostViewModel!
         
     override func viewDidLoad() {
         super.viewDidLoad()

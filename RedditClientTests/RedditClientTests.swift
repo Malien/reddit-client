@@ -10,8 +10,8 @@ import XCTest
 
 class RedditClientTests: XCTestCase {
     
-    var store: ApplicationStore! = nil
-    var reddit: RedditRepository! = nil
+    var store: ApplicationStore!
+    var reddit: RedditRepository!
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.

@@ -12,7 +12,7 @@ final class BookmarkedPostListController : UITableViewController, UISearchResult
     static let reuseIndentifier = "postCell"
     
     private var posts: [Post] = []
-    private var bookmarksViewModel: PostBookmarksViewModel! = nil
+    private var bookmarksViewModel: PostBookmarksViewModel!
     
     private let searchController = UISearchController(searchResultsController: nil)
     

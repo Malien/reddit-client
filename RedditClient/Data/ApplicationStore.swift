@@ -6,11 +6,11 @@ final class ApplicationStore {
     var subredditTopPosts: Cache<TopPostsRequest, PaginationContainer<Post>>
     var posts: Cache<PostID, Post>
     var saved: SavedPosts
-    private var postsSub: Cache<PostID, Post>.SubID! = nil
+    private var postsSub: Cache<PostID, Post>.SubID!
     #if PERSIST_CACHES
-    private var topPostsSub: Cache<TopPostsRequest, PaginationContainer<Post>>.SubID! = nil
+    private var topPostsSub: Cache<TopPostsRequest, PaginationContainer<Post>>.SubID!
     #endif
-    private var savedSub: SavedPosts.SubID! = nil
+    private var savedSub: SavedPosts.SubID!
     private(set) var initiateSave: () -> Void = {}
     
     init(
