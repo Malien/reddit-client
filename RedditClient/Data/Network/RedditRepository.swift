@@ -14,9 +14,9 @@ class RedditRepository {
     let service: RedditService
     var store: ApplicationStore
 
-    init(store: ApplicationStore) {
+    init(store: ApplicationStore, baseURL: URL) {
         self.store = store
-        self.service = RedditService(store: store)
+        self.service = RedditService(store: store, baseURL: baseURL)
     }
 
     struct Subscription<Key, Value>: Cancellable where Key: Hashable {

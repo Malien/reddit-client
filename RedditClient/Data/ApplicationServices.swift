@@ -15,6 +15,8 @@ final class ApplicationServices {
     static let ioQueue = DispatchQueue(label: "ua.edu.ukma.ios.Reddit.io", qos: .background)
     static let version = Bundle.main.infoDictionary!["CFBundleShortVersionString"]! as! String
     
+    static let APIBaseURL = URL(staticString: "https://www.reddit.com")
+    
     static var shared: ApplicationServices!
     static func loadFromDisk() {
         do {
@@ -32,7 +34,7 @@ final class ApplicationServices {
     
     init(store: ApplicationStore = ApplicationStore()) {
         self.store = store
-        self.reddit = RedditRepository(store: store)
+        self.reddit = RedditRepository(store: store, baseURL: Self.APIBaseURL)
     }
     
 }

@@ -25,8 +25,10 @@
 		C40D828F25704BEC0059C67C /* CodableTuple.swift in Sources */ = {isa = PBXBuildFile; fileRef = C40D828B257046DE0059C67C /* CodableTuple.swift */; };
 		C41F5E7125726886009888E0 /* RequestContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41F5E7025726886009888E0 /* RequestContainer.swift */; };
 		C41F5E7225727698009888E0 /* RequestContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41F5E7025726886009888E0 /* RequestContainer.swift */; };
+		C41F5E742572867A009888E0 /* CommentsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41F5E732572867A009888E0 /* CommentsList.swift */; };
+		C41F5E76257294C4009888E0 /* CommentsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41F5E75257294C4009888E0 /* CommentsViewModel.swift */; };
+		C41F5E78257299FC009888E0 /* CommentListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41F5E77257299FC009888E0 /* CommentListViewController.swift */; };
 		C4563CE92549F18400FAB781 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4563CE82549F18400FAB781 /* AppDelegate.swift */; };
-		C4563CED2549F18400FAB781 /* SinglePostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4563CEC2549F18400FAB781 /* SinglePostViewController.swift */; };
 		C4563CF52549F18500FAB781 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C4563CF42549F18500FAB781 /* Assets.xcassets */; };
 		C4563CF82549F18500FAB781 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C4563CF62549F18500FAB781 /* LaunchScreen.storyboard */; };
 		C4563D032549F18500FAB781 /* RedditClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4563D022549F18500FAB781 /* RedditClientTests.swift */; };
@@ -48,7 +50,7 @@
 		C45C847A255AE05000C9181F /* EventEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45C8479255AE05000C9181F /* EventEmitter.swift */; };
 		C45C847C255AF54900C9181F /* BookmarkedPostListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45C847B255AF54900C9181F /* BookmarkedPostListController.swift */; };
 		C45C847E255BEF1500C9181F /* EntityIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45C847D255BEF1500C9181F /* EntityIdentifier.swift */; };
-		C48C9C57254A1707007EB11A /* PostPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48C9C56254A1707007EB11A /* PostPresentation.swift */; };
+		C48C9C57254A1707007EB11A /* Timestamped.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48C9C56254A1707007EB11A /* Timestamped.swift */; };
 		C48D8F6C255079B9004742FA /* formatCount.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48D8F6B255079B9004742FA /* formatCount.swift */; };
 		C48D8F6E25508B57004742FA /* SinglePostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48D8F6D25508B56004742FA /* SinglePostViewModel.swift */; };
 		C4AD2F79255C445E0078ABBA /* debounce.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AD2F78255C445E0078ABBA /* debounce.swift */; };
@@ -88,6 +90,8 @@
 		C4DDFCC1254F64CD0099BFA6 /* PostInteractionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DDFCC0254F64CC0099BFA6 /* PostInteractionsView.swift */; };
 		C4DDFCC3254F682E0099BFA6 /* UpvoteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DDFCC2254F682E0099BFA6 /* UpvoteView.swift */; };
 		C4DDFCC7254F6C9A0099BFA6 /* LabeledButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DDFCC6254F6C9A0099BFA6 /* LabeledButton.swift */; };
+		C4E308612572CACC00A6AD56 /* CommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4E308602572CACC00A6AD56 /* CommentView.swift */; };
+		C4E308632572CC6300A6AD56 /* CommentDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4E308622572CC6300A6AD56 /* CommentDetailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -114,9 +118,11 @@
 		C40D8280257038E70059C67C /* Fullname.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fullname.swift; sourceTree = "<group>"; };
 		C40D828B257046DE0059C67C /* CodableTuple.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableTuple.swift; sourceTree = "<group>"; };
 		C41F5E7025726886009888E0 /* RequestContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestContainer.swift; sourceTree = "<group>"; };
+		C41F5E732572867A009888E0 /* CommentsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsList.swift; sourceTree = "<group>"; };
+		C41F5E75257294C4009888E0 /* CommentsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsViewModel.swift; sourceTree = "<group>"; };
+		C41F5E77257299FC009888E0 /* CommentListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentListViewController.swift; sourceTree = "<group>"; };
 		C4563CE52549F18400FAB781 /* Reddit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Reddit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C4563CE82549F18400FAB781 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		C4563CEC2549F18400FAB781 /* SinglePostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SinglePostViewController.swift; sourceTree = "<group>"; };
 		C4563CF42549F18500FAB781 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C4563CF72549F18500FAB781 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C4563CF92549F18500FAB781 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -143,7 +149,7 @@
 		C45C8479255AE05000C9181F /* EventEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventEmitter.swift; sourceTree = "<group>"; };
 		C45C847B255AF54900C9181F /* BookmarkedPostListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkedPostListController.swift; sourceTree = "<group>"; };
 		C45C847D255BEF1500C9181F /* EntityIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityIdentifier.swift; sourceTree = "<group>"; };
-		C48C9C56254A1707007EB11A /* PostPresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostPresentation.swift; sourceTree = "<group>"; };
+		C48C9C56254A1707007EB11A /* Timestamped.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Timestamped.swift; sourceTree = "<group>"; };
 		C48D8F6B255079B9004742FA /* formatCount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = formatCount.swift; sourceTree = "<group>"; };
 		C48D8F6D25508B56004742FA /* SinglePostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SinglePostViewModel.swift; sourceTree = "<group>"; };
 		C4AD2F78255C445E0078ABBA /* debounce.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = debounce.swift; sourceTree = "<group>"; };
@@ -168,6 +174,8 @@
 		C4DDFCC0254F64CC0099BFA6 /* PostInteractionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostInteractionsView.swift; sourceTree = "<group>"; };
 		C4DDFCC2254F682E0099BFA6 /* UpvoteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpvoteView.swift; sourceTree = "<group>"; };
 		C4DDFCC6254F6C9A0099BFA6 /* LabeledButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabeledButton.swift; sourceTree = "<group>"; };
+		C4E308602572CACC00A6AD56 /* CommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentView.swift; sourceTree = "<group>"; };
+		C4E308622572CC6300A6AD56 /* CommentDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentDetailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -304,7 +312,7 @@
 		C4563D2F2549F2AC00FAB781 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
-				C48C9C56254A1707007EB11A /* PostPresentation.swift */,
+				C48C9C56254A1707007EB11A /* Timestamped.swift */,
 				C4DDFCB3254F034E0099BFA6 /* ApplicationColor.swift */,
 				C4DDFCB5254F05C10099BFA6 /* ApplicationIcon.swift */,
 				C4DDFCB9254F10EA0099BFA6 /* ApplicationFont.swift */,
@@ -312,6 +320,7 @@
 				C48D8F6D25508B56004742FA /* SinglePostViewModel.swift */,
 				C4BA8284255946B700FFFDEF /* PostListViewModel.swift */,
 				C4D620E12559EBD6004740B5 /* PostBookmarksViewModel.swift */,
+				C41F5E75257294C4009888E0 /* CommentsViewModel.swift */,
 			);
 			path = Presentation;
 			sourceTree = "<group>";
@@ -328,6 +337,9 @@
 				C4C23D7425585E1D00D48DB3 /* PostTableViewCell.swift */,
 				C406A58D2565955900695401 /* PostThumbnailView.swift */,
 				C4D614B3256D657B003345E2 /* BookmarkIconView.swift */,
+				C41F5E732572867A009888E0 /* CommentsList.swift */,
+				C4E308622572CC6300A6AD56 /* CommentDetailView.swift */,
+				C4E308602572CACC00A6AD56 /* CommentView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -342,10 +354,10 @@
 		C4D614B5256D67A8003345E2 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				C4563CEC2549F18400FAB781 /* SinglePostViewController.swift */,
 				C4C23D7225585C5F00D48DB3 /* PostListViewController.swift */,
 				C45C847B255AF54900C9181F /* BookmarkedPostListController.swift */,
 				C4BA82882559D8A500FFFDEF /* DetailPostViewController.swift */,
+				C41F5E77257299FC009888E0 /* CommentListViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -498,7 +510,7 @@
 				C45C847E255BEF1500C9181F /* EntityIdentifier.swift in Sources */,
 				C4563D292549F23B00FAB781 /* RedditService.swift in Sources */,
 				C4DDFCB4254F034E0099BFA6 /* ApplicationColor.swift in Sources */,
-				C48C9C57254A1707007EB11A /* PostPresentation.swift in Sources */,
+				C48C9C57254A1707007EB11A /* Timestamped.swift in Sources */,
 				C4563D3F2549FABB00FAB781 /* PostPreview.swift in Sources */,
 				C4D620E22559EBD6004740B5 /* PostBookmarksViewModel.swift in Sources */,
 				C4563D372549F98100FAB781 /* Post.swift in Sources */,
@@ -507,10 +519,11 @@
 				C4BA8272255896CA00FFFDEF /* PaginationContainer.swift in Sources */,
 				C40D828C257046DE0059C67C /* CodableTuple.swift in Sources */,
 				C4D620E6255AD345004740B5 /* SubscriptionID.swift in Sources */,
-				C4563CED2549F18400FAB781 /* SinglePostViewController.swift in Sources */,
+				C4E308612572CACC00A6AD56 /* CommentView.swift in Sources */,
 				C4563CE92549F18400FAB781 /* AppDelegate.swift in Sources */,
 				C4D620E8255AD77F004740B5 /* ApplicationServices.swift in Sources */,
 				C4AD2F79255C445E0078ABBA /* debounce.swift in Sources */,
+				C41F5E78257299FC009888E0 /* CommentListViewController.swift in Sources */,
 				C4BA8287255946DF00FFFDEF /* Subreddit.swift in Sources */,
 				C4DDFCC1254F64CD0099BFA6 /* PostInteractionsView.swift in Sources */,
 				C4D614B4256D657B003345E2 /* BookmarkIconView.swift in Sources */,
@@ -523,10 +536,12 @@
 				C4563D252549F23B00FAB781 /* Cache.swift in Sources */,
 				C4DDFCB6254F05C10099BFA6 /* ApplicationIcon.swift in Sources */,
 				C4563D432549FBFB00FAB781 /* PostView.swift in Sources */,
+				C41F5E76257294C4009888E0 /* CommentsViewModel.swift in Sources */,
 				C4563D262549F23B00FAB781 /* PostID.swift in Sources */,
 				C45C847C255AF54900C9181F /* BookmarkedPostListController.swift in Sources */,
 				C4D620EA255ADD21004740B5 /* ApplicationObserved.swift in Sources */,
 				C40D827F257037FC0059C67C /* CommentID.swift in Sources */,
+				C41F5E742572867A009888E0 /* CommentsList.swift in Sources */,
 				C48D8F6E25508B57004742FA /* SinglePostViewModel.swift in Sources */,
 				C4BA8285255946B700FFFDEF /* PostListViewModel.swift in Sources */,
 				C4563D392549F9A400FAB781 /* ImageDescription.swift in Sources */,
@@ -537,6 +552,7 @@
 				C4D620E02559E853004740B5 /* SavedPosts.swift in Sources */,
 				C4DDFCC7254F6C9A0099BFA6 /* LabeledButton.swift in Sources */,
 				C4563D352549F82600FAB781 /* Vote.swift in Sources */,
+				C4E308632572CC6300A6AD56 /* CommentDetailView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -730,7 +746,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = GJ2GCHCH5D;
 				INFOPLIST_FILE = RedditClient/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -751,7 +767,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = GJ2GCHCH5D;
 				INFOPLIST_FILE = RedditClient/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

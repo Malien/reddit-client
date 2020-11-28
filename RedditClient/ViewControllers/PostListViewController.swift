@@ -94,8 +94,8 @@ final class PostListViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if let posts = posts, posts.hasMore && indexPath.row > posts.items.count - 2 {
-            posts.fetchMore(count: 5)
+        if let posts = self.posts, posts.hasMore && indexPath.row > posts.items.count - 2 {
+            self.posts!.fetchMore(count: 5)
         }
     }
 

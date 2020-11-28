@@ -8,10 +8,12 @@
 
 import Foundation
 
+protocol Timestamped {
+    var createdEpochUTC: TimeInterval { get }
+}
 
-extension Post {
-    var created: Date { Date.init(timeIntervalSince1970: createdEpoch) }
-    var createdUTC: Date { Date.init(timeIntervalSince1970: createdUTCEpoch) }
+extension Timestamped {
+    var createdUTC: Date { Date.init(timeIntervalSince1970: createdEpochUTC) }
     
     var userReadableTimeDiff: String {
         let formatter = DateComponentsFormatter()

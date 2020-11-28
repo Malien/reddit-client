@@ -19,11 +19,13 @@ struct PaginationContainer<T> where T: Keyable {
 
     var hasMore: Bool
     
+    var invoked = false
     var doFetch: Optional<(_ limit: Int, _ after: T.Key?) -> Void> = nil
     
-    func fetchMore(count: Int) {
-        if let doFetch = doFetch, let last = items.last?.key {
-            doFetch(count, last)
+    mutating func fetchMore(count: Int) {
+        if let doFetch = doFetch, !invoked {
+            invoked = true
+            doFetch(count, items.last?.key)
         }
     }
 }

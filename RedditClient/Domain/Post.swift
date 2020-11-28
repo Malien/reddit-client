@@ -11,7 +11,7 @@ import Foundation
 /// This is a post, but throughout reddit api doccumentations
 /// it is refered to as a link for some reason
 /// This is both, serialization container for reddit API responses, and domain model object
-struct Post: RedditEntity, Identifiable, Keyable {
+struct Post: RedditEntity, Identifiable, Keyable, Timestamped {
     static var kind: String { "t3" }
     var key: PostID { id }
     
@@ -27,7 +27,7 @@ struct Post: RedditEntity, Identifiable, Keyable {
     let likes: Vote
     
     let createdEpoch: TimeInterval
-    let createdUTCEpoch: TimeInterval
+    let createdEpochUTC: TimeInterval
     
     /// If link is promotional, author is set to `nil`
     let author: String?
@@ -64,7 +64,7 @@ struct Post: RedditEntity, Identifiable, Keyable {
         case likes
         
         case createdEpoch = "created"
-        case createdUTCEpoch = "created_utc"
+        case createdEpochUTC = "created_utc"
         
         case author
         case clicked

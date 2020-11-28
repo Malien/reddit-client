@@ -22,7 +22,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         ApplicationServices.loadFromDisk()
         
         window = UIWindow(frame: UIScreen.main.bounds)
-        let controller = PostListViewController(subreddit: "ios")
+//        let controller = PostListViewController(subreddit: "ios")
+        let controller = CommentListViewController(for: PostID(string: "jrbomi"), batchSize: 100)
         let navigation = UINavigationController(rootViewController: controller)
         window!.rootViewController = navigation
         window!.makeKeyAndVisible()

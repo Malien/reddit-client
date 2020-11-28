@@ -8,28 +8,36 @@
 
 import Foundation
 
-struct Comment: RedditEntity, Identifiable, Keyable {
+struct Comment: RedditEntity, Identifiable, Keyable, Timestamped {
     static var kind: String { "t1" }
     var key: CommentID { id }
     
     let id: CommentID
-    /// fullname property (a combination of `kind` and `id`, like `t3_ji8ght`)
+    /// fullname property (a combination of `kind` and `id`, like `t1_ji8ght`)
     let name: Fullname<Comment>
     
+    // Upvotes. Fuzzed to prevent bot spam
     let ups: Int
-    // Downvotes. Fuzzed to prevent bit spam
+    // Downvotes. Fuzzed to prevent bot spam
     let downs: Int
+    /// Always accurate, despite ups and downs being fuzzed
+    let score: Int
     /// User vote
     let likes: Vote
-    
+
     let createdEpoch: TimeInterval
-    let createdUTCEpoch: TimeInterval
+    let createdEpochUTC: TimeInterval
     
     /// If link is promotional, author is set to `nil`
     let author: String?
     let authorFullname: String
     
+    let permalink: String
     let body: String
+    
+    var url: URL {
+        ApplicationServices.APIBaseURL.appendingPathComponent(permalink)
+    }
 }
 
 extension Comment: Codable {
@@ -40,13 +48,15 @@ extension Comment: Codable {
         case ups
         case downs
         case likes
+        case score
         
         case createdEpoch = "created"
-        case createdUTCEpoch = "created_utc"
+        case createdEpochUTC = "created_utc"
         
         case author
         case authorFullname = "author_fullname"
         
+        case permalink
         case body
     }
 }

@@ -4,7 +4,12 @@ import Foundation
 /// But it forced me to make `ApplicationStore` and to make it a class
 struct RedditService {
     let store: ApplicationStore
-    let api = RedditAPI()
+    let api: RedditAPI
+    
+    init(store: ApplicationStore, baseURL: URL) {
+        self.store = store
+        self.api = RedditAPI(baseURL: baseURL)
+    }
     
     private static func handleError<T>(_ result: Result<T, RedditAPI.Error>, onError: (RedditAPI.Error) -> Void, onSuccess: (T) -> Void) {
         switch result {
@@ -53,14 +58,14 @@ struct RedditService {
                 if var container = cache[request] {
                     container.items += listing.children.map { $0.inner }
                     container.doFetch = fetchMore
-                    container.hasMore = listing.dist == limit
+                    container.hasMore = listing.children.count == limit
                     cache[request] = container
                 } else {
                     let items = listing.children.map { $0.inner }
                     let container = PaginationContainer(
                         items: items,
                         start: request.start,
-                        hasMore: listing.dist == limit,
+                        hasMore: listing.children.count == limit,
                         doFetch: fetchMore
                     )
                     cache[request] = container

@@ -126,11 +126,9 @@ struct RedditAPI {
 
     // MARK: Actual implementation
 
-    public static let redditBaseURL = URL(staticString: "https://www.reddit.com/")
-
     private let baseURL: URL
 
-    init(baseURL: URL = redditBaseURL) {
+    init(baseURL: URL) {
         self.baseURL = baseURL
     }
 
