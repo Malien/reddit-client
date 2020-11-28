@@ -31,6 +31,7 @@ struct CommentDetailView: View {
                         .padding(.vertical, 8)
                         .padding(.horizontal, 32)
                 }
+                .frame(maxWidth: .infinity)
                 .foregroundColor(.white)
                 .background(Color(UIColor.accent))
                 .cornerRadius(10)
