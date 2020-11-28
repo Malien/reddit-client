@@ -10,8 +10,9 @@ import Foundation
 
 protocol EntityIdentifier {
     associatedtype Entity
+    init(string: String)
 }
 
-extension EntityIdentifier where Entity: RedditEntity {
-    var fullname: String { "\(Entity.kind)_\(self)" }
+extension EntityIdentifier where Entity: RedditEntity, Entity: Keyable, Entity.Key == Self {
+    var fullname: Fullname<Entity> { Fullname(id: self) }
 }

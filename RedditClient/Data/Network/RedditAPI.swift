@@ -16,7 +16,7 @@ extension RedditEntity where Self: Keyable, Self.Key: EntityIdentifier, Self.Key
             queryItems.append(URLQueryItem(name: "limit", value: limit.description))
         }
         if let after = after {
-            queryItems.append(URLQueryItem(name: "after", value: after.fullname))
+            queryItems.append(URLQueryItem(name: "after", value: after.fullname.description))
         }
         if components.queryItems != nil {
             components.queryItems!.append(contentsOf: queryItems)
@@ -105,6 +105,7 @@ struct RedditAPI {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             let kind = try container.decode(String.self, forKey: .kind)
             if kind != T.kind {
+                // TODO: use DecodingError
                 throw Error.invalidResponseKind(expected: T.kind, got: kind)
             }
             let data = try container.decode(T.self, forKey: .data)
@@ -117,7 +118,7 @@ struct RedditAPI {
         static var kind: String { "Listing" }
 
         let modhash: String
-        let dist: Int
+        let dist: Int?
         let after: String?
         let before: String?
         let children: [Kinded<T>]
@@ -173,13 +174,17 @@ struct RedditAPI {
             completionHandler(.failure(.invalidURL))
             return DummyCancellable()
         }
-
-        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+        
+        var request = URLRequest(url: url)
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("utf-8", forHTTPHeaderField: "Content-Type")
+        
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
             guard let data = data, let _ = response else {
                 completionHandler(.failure(.requestError(error)))
                 return
             }
-
+            
             guard let response = response as? HTTPURLResponse else {
                 completionHandler(.failure(.requestError()))
                 return
@@ -297,12 +302,43 @@ struct RedditAPI {
         completionHandler: @escaping (Result<Listing<Post>, Error>) -> Void
     ) -> Cancellable {
         var components = URLComponents()
-        let idsString = ids.map { $0.fullname }.joined(separator: ",")
+        let idsString = ids.map { $0.fullname.description }.joined(separator: ",")
         components.path = "/by_id/\(idsString).json"
         Post.paginate(components: &components, limit: limit, after: after)
 
         return fetchMap(from: components, completionHandler: completionHandler) {
             (result: Kinded<Listing<Post>>) in result.inner
+        }
+    }
+    
+    /// Fetch comments to the post in the subreddit specified.
+    /// - Parameters:
+    ///     - for: id of a post
+    ///     - limit: maximum amount of entries to be fetched. Optional
+    ///     - after: id of an entity used to set initial fetching point. Used for pagination. Optional
+    ///     - completionHandler: function that will run asynchronously with the result of the operation.
+    ///                          In case of successfull operation, handler will be called with `Result.success(Listing<Comment>)`.
+    ///                          Otherwise, in case of an error, handler will be called with `Result.failure(RedditAPI.Error)`
+    /// - Returns: `Cancellable` which can be used to cancel request
+    /// - Note: If provided url component will result in invalid url, `completionHandler` will be called synchronously
+    ///         with `Result.failure(RedditAPI.Error.invalidURL)` and fetch iteself will return `nil`
+    @discardableResult
+    public func comments(
+        for postID: PostID,
+        limit: Int? = nil,
+        after: CommentID? = nil,
+        completionHandler: @escaping (Result<Listing<Comment>, Error>) -> Void
+    ) -> Cancellable {
+        var components = URLComponents()
+        components.path = "/comments/\(postID).json"
+        components.queryItems = [
+            URLQueryItem(name: "depth", value: "1"),
+            URLQueryItem(name: "showmore", value: "0")
+        ]
+        Comment.paginate(components: &components, limit: limit, after: after)
+        
+        return fetchMap(from: components, completionHandler: completionHandler) {
+            (result: CodableTuple<Kinded<Listing<Post>>, Kinded<Listing<Comment>>>) in result.second.inner
         }
     }
 

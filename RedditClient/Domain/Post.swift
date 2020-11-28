@@ -17,7 +17,7 @@ struct Post: RedditEntity, Identifiable, Keyable {
     
     let id: PostID
     /// fullname property (a combination of `kind` and `id`, like `t3_ji8ght`)
-    let name: String
+    let name: Fullname<Post>
     
     // Upvotes. Fuzzed to prevent bot spam
     let ups: Int

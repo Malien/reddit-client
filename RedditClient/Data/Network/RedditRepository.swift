@@ -62,7 +62,7 @@ struct RedditRepository {
         
         if let items = store.subredditTopPosts[request] {
             dataStream(.success(items))
-            if force {
+            if force || items.items.count < limit {
                 makeRequest()
             }
         } else {
@@ -73,46 +73,49 @@ struct RedditRepository {
             request: request, subscription: subscription, store: store,
             cache: \ApplicationStore.subredditTopPosts, cancellation: cancellations)
     }
-
-//    func posts(
-//        withIDs ids: [PostID],
-//        limit: Int? = nil,
-//        after: PostID? = nil,
-//        force: Bool = false,
-//        dataStream: @escaping (Result<[Post], RedditAPI.Error>) -> Void
-//    ) -> SubscriptionHolder {
-//        let request = PostsRequest(ids: ids)
-//        let subscription = store.posts.subscribe { event in
-//            switch event {
-//            case .updated(let key, let value):
-//                dataStream
-//            }
-//        }
-//
-//        var cancellations: [Cancellable] = []
-//
-//        let makeRequest = {
-//            let cancellation = self.service.fetchTopPosts(request: request, limit: limit, after: after) {
-//                dataStream(.failure($0))
-//            }
-//            cancellations.append(cancellation)
-//        }
-//
-//        if let items = store.subredditTopPosts[request] {
-//            dataStream(.success(items))
-//            if force {
-//                makeRequest()
-//            }
-//        } else {
-//            makeRequest()
-//        }
-//
-//        return Subscription(
-//            request: request, subscription: subscription, store: store,
-//            cache: \ApplicationStore.subredditTopPosts, cancellations: cancellations)
-//
-//    }
     
+    func comments(
+        for postID: PostID,
+        limit: Int,
+        after: CommentID? = nil,
+        force: Bool = false,
+        dataStream: @escaping (Result<PaginationContainer<Comment>, RedditAPI.Error>) -> Void
+    ) -> Cancellable {
+        let request = CommentsRequest(post: postID, start: after)
+        let subscription = store.postComments.subscribe(to: request) { event in
+            switch event {
+            case .added(let comments):
+                dataStream(.success(comments))
+            case .updated(let comments, _):
+                dataStream(.success(comments))
+            default:
+                break
+            }
+        }
+        
+        var cancellations: [Cancellable] = []
+        
+        let makeRequest = {
+            let cancellation = self.service.fetchComments(request: request, limit: limit, after: after) {
+                dataStream(.failure($0))
+            }
+            cancellations.append(cancellation)
+        }
+        
+        if let items = store.postComments[request] {
+            dataStream(.success(items))
+            if force || items.items.count < limit {
+                makeRequest()
+            }
+        } else {
+            makeRequest()
+        }
+        
+        return Subscription(
+            request: request, subscription: subscription, store: store,
+            cache: \ApplicationStore.postComments, cancellation: cancellations)
+    }
+
     func post(
         withID id: PostID,
         force: Bool = false,

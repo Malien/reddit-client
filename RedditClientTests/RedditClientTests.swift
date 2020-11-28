@@ -47,7 +47,38 @@ class RedditClientTests: XCTestCase {
             }
         }
         sleep(10)
-        sub.unsubscribe()
+        sub.cancel()
+    }
+    
+    func testComments() throws {
+        reddit.service.api.comments(for: PostID(string: "jrbomi")) { result in
+            switch result {
+            case .success(let comments):
+                XCTAssertTrue(comments.children.count > 0)
+            case .failure(let error):
+                XCTFail("Error occurrd: \(error)")
+            }
+        }
+        sleep(10)
     }
 
+    func testCommentPagination() throws {
+        var fetched = false
+        var sub = reddit.comments(for: PostID(string: "jrbomi"), limit: 2) { result in
+            switch result {
+            case .success(let comments):
+                if fetched {
+                    XCTAssertEqual(comments.items.count, 4)
+                } else {
+                    XCTAssertEqual(comments.items.count, 2)
+                    comments.fetchMore(count: 2)
+                    fetched = true
+                }
+            case .failure(let error):
+                XCTFail("Error occured: \(error)")
+            }
+        }
+        sleep(10)
+        sub.cancel()
+    }
 }
