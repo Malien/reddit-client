@@ -8,11 +8,11 @@
 
 import SwiftUI
 
-struct CommentsList: View {
-    @ObservedObject var viewModel: CommentsViewModel
+struct CommentsList<ViewModel: CommentsViewModel>: View {
+    @ObservedObject var viewModel: ViewModel
     var body: some View {
         List {
-            Text("No fancy application background for you! At least in dark mode. I'm to lazy to upgrade to Xcode 12 and use LazyVStack. SwiftUI's List view is completely unstylable")
+            Text("No fancy application background for you! At least in dark mode. I'm too lazy to upgrade to Xcode 12 and use LazyVStack (no pun intended). SwiftUI's List view is completely unstylable")
                 .font(.system(size: 14))
                 .foregroundColor(Color(UIColor.subtext))
             ForEach(viewModel.comments.indices, id: \.self) { idx in
@@ -32,15 +32,14 @@ struct CommentsList: View {
     }
 }
 
-#if DEBUG
-
 struct CommentsList_Previews: PreviewProvider {
-    static let comments = Array.init(repeating: CommentView_Previews.comment, count: 5)
+    class DummyCommentsViewModel: CommentsViewModel {
+        var comments = Array.init(repeating: CommentView_Previews.comment, count: 5)
+        func fetchMore() { }
+    }
     
     static var previews: some View {
-        CommentsList(viewModel: CommentsViewModel(for: PostID(string: "jrbomi"), batchSize: 10))
+        CommentsList(viewModel: DummyCommentsViewModel())
             .previewDisplayName("Comment list")
     }
 }
-
-#endif

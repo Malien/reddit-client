@@ -9,11 +9,17 @@
 import Foundation
 import Combine
 
-class CommentsViewModel: ObservableObject {
+// Dunno, this is a protocol just so I can get nice previews in Xcode.
+protocol CommentsViewModel: ObservableObject {
+    var comments: [Comment] { get }
+    func fetchMore()
+}
+
+class CommentsViewModelImpl: CommentsViewModel {
     @Published
     private var _comments: PaginationContainer<Comment> = PaginationContainer(items: [], start: nil, hasMore: false)
     
-    var sub: Cancellable!
+    private var sub: Cancellable!
     let batchSize: Int
     
     init(for postID: PostID, batchSize: Int) {
