@@ -9,9 +9,8 @@
 import Foundation
 
 protocol RequestContainer {
-    associatedtype Start;
-    associatedtype Data;
-    var start: Start? { get }
+    associatedtype Data: Keyable;
+    var start: Data.Key? { get }
 }
 
 struct TopPostsRequest: RequestContainer, Hashable, Codable {

@@ -10,9 +10,9 @@ extension Array {
      }
 }
 
-struct RedditRepository {
+class RedditRepository {
     let service: RedditService
-    let store: ApplicationStore
+    var store: ApplicationStore
 
     init(store: ApplicationStore) {
         self.store = store
@@ -32,15 +32,14 @@ struct RedditRepository {
         }
     }
     
-    func topPosts(
-        from subreddit: Subreddit,
-        limit: Int,
-        after: PostID? = nil,
-        force: Bool = false,
-        dataStream: @escaping (Result<PaginationContainer<Post>, RedditAPI.Error>) -> Void
+    private func request<Request, Response>(
+        request: Request,
+        fetchCondition: (Response) -> Bool,
+        dataStream: @escaping(Result<Response, RedditAPI.Error>) -> Void,
+        cachePath: WritableKeyPath<ApplicationStore, Cache<Request, Response>>,
+        fetch: (Request, @escaping (RedditAPI.Error) -> Void) -> Cancellable
     ) -> Cancellable {
-        let request = TopPostsRequest(subreddit: subreddit, start: after)
-        let subscription = store.subredditTopPosts.subscribe(to: request) { event in
+        let subscription = store[keyPath: cachePath].subscribe(to: request) { event in
             switch event {
             case .added(let posts):
                 dataStream(.success(posts))
@@ -53,16 +52,16 @@ struct RedditRepository {
         
         var cancellations: [Cancellable] = []
         
-        let makeRequest = {
-            let cancellation = self.service.fetchTopPosts(request: request, limit: limit, after: after) {
+        func makeRequest() {
+            let cancellation = fetch(request) {
                 dataStream(.failure($0))
             }
             cancellations.append(cancellation)
         }
         
-        if let items = store.subredditTopPosts[request] {
+        if let items = store[keyPath: cachePath][request] {
             dataStream(.success(items))
-            if force || items.items.count < limit {
+            if fetchCondition(items) {
                 makeRequest()
             }
         } else {
@@ -71,7 +70,61 @@ struct RedditRepository {
         
         return Subscription(
             request: request, subscription: subscription, store: store,
-            cache: \ApplicationStore.subredditTopPosts, cancellation: cancellations)
+            cache: cachePath, cancellation: cancellations)
+    }
+    
+    private func singleRequest<Request, Response>(
+        request: Request,
+        force: Bool,
+        dataStream: @escaping(Result<Response, RedditAPI.Error>) -> Void,
+        cachePath: WritableKeyPath<ApplicationStore, Cache<Request, Response>>,
+        fetch: (Request, @escaping (RedditAPI.Error) -> Void) -> Cancellable
+    ) -> Cancellable {
+        self.request(
+            request: request,
+            fetchCondition: { _ in force },
+            dataStream: dataStream,
+            cachePath: cachePath,
+            fetch: fetch
+        )
+    }
+    
+    private func paginatedRequest<Request: RequestContainer>(
+        request: Request,
+        limit: Int,
+        after: Request.Data.Key?,
+        force: Bool,
+        dataStream: @escaping(Result<PaginationContainer<Request.Data>, RedditAPI.Error>) -> Void,
+        cachePath: WritableKeyPath<ApplicationStore, Cache<Request, PaginationContainer<Request.Data>>>,
+        fetch: (Request, Int?, Request.Data.Key?, @escaping (RedditAPI.Error) -> Void) -> Cancellable
+    ) -> Cancellable {
+        self.request(
+            request: request,
+            fetchCondition: { force || $0.items.count > 0 },
+            dataStream: dataStream,
+            cachePath: cachePath,
+            fetch: { fetch($0, limit, after, $1) }
+        )
+    }
+    
+    // MARK: Actual requests
+
+    func topPosts(
+        from subreddit: Subreddit,
+        limit: Int,
+        after: PostID? = nil,
+        force: Bool = false,
+        dataStream: @escaping (Result<PaginationContainer<Post>, RedditAPI.Error>) -> Void
+    ) -> Cancellable {
+        paginatedRequest(
+            request: TopPostsRequest(subreddit: subreddit, start: after),
+            limit: limit,
+            after: after,
+            force: force,
+            dataStream: dataStream,
+            cachePath: \ApplicationStore.subredditTopPosts,
+            fetch: service.fetchTopPosts(request:limit:after:onError:)
+        )
     }
     
     func comments(
@@ -81,39 +134,15 @@ struct RedditRepository {
         force: Bool = false,
         dataStream: @escaping (Result<PaginationContainer<Comment>, RedditAPI.Error>) -> Void
     ) -> Cancellable {
-        let request = CommentsRequest(post: postID, start: after)
-        let subscription = store.postComments.subscribe(to: request) { event in
-            switch event {
-            case .added(let comments):
-                dataStream(.success(comments))
-            case .updated(let comments, _):
-                dataStream(.success(comments))
-            default:
-                break
-            }
-        }
-        
-        var cancellations: [Cancellable] = []
-        
-        let makeRequest = {
-            let cancellation = self.service.fetchComments(request: request, limit: limit, after: after) {
-                dataStream(.failure($0))
-            }
-            cancellations.append(cancellation)
-        }
-        
-        if let items = store.postComments[request] {
-            dataStream(.success(items))
-            if force || items.items.count < limit {
-                makeRequest()
-            }
-        } else {
-            makeRequest()
-        }
-        
-        return Subscription(
-            request: request, subscription: subscription, store: store,
-            cache: \ApplicationStore.postComments, cancellation: cancellations)
+        paginatedRequest(
+            request: CommentsRequest(post: postID, start: after),
+            limit: limit,
+            after: after,
+            force: force,
+            dataStream: dataStream,
+            cachePath: \ApplicationStore.postComments,
+            fetch: service.fetchComments(request:limit:after:onError:)
+        )
     }
 
     func post(
@@ -121,35 +150,12 @@ struct RedditRepository {
         force: Bool = false,
         dataStream: @escaping (Result<Post, RedditAPI.Error>) -> Void
     ) -> Cancellable {
-        let subscription = store.posts.subscribe(to: id) { event in
-            switch event {
-            case .added(let post):
-                dataStream(.success(post))
-            case .updated(let post, _):
-                dataStream(.success(post))
-            default:
-                break
-            }
-        }
-        
-        var cancellations: [Cancellable] = []
-        
-        let makeRequest = {
-            let cancellation = self.service.fetchPost(withID: id) {
-                dataStream(.failure($0))
-            }
-            cancellations.append(cancellation)
-        }
-        
-        if let post = store.posts[id] {
-            dataStream(.success(post))
-            if force {
-                makeRequest()
-            }
-        } else {
-            makeRequest()
-        }
-        
-        return Subscription(request: id, subscription: subscription, store: store, cache: \ApplicationStore.posts, cancellation: cancellations)
+        singleRequest(
+            request: id,
+            force: force,
+            dataStream: dataStream,
+            cachePath: \ApplicationStore.posts,
+            fetch: service.fetchPost(withID:onError:)
+        )
     }
 }

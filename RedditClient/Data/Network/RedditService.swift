@@ -18,21 +18,21 @@ struct RedditService {
     private func paginationRequest<Request : RequestContainer>(
         of request: Request,
         limit: Int?,
-        after: Request.Start?,
+        after: Request.Data.Key?,
         cachePath: WritableKeyPath<ApplicationStore, Cache<Request, PaginationContainer<Request.Data>>>,
         entityCachePath: WritableKeyPath<ApplicationStore, Cache<Request.Data.Key, Request.Data>>?,
         onError: @escaping (RedditAPI.Error) -> Void,
         fetch: @escaping (
             Request,
             Int?,
-            Request.Start?,
+            Request.Data.Key?,
             @escaping (Result<RedditAPI.Listing<Request.Data>, RedditAPI.Error>) -> Void
         ) -> Cancellable
-    ) -> Cancellable where Request.Data.Key == Request.Start {
+    ) -> Cancellable {
         // TODO: Figure out how to cancel all of these requests
         let cancellation = fetch(request, limit, after) { response in
             Self.handleError(response, onError: onError) { listing in
-                let fetchMore = { (nextLimit: Int, nextAfter: Request.Start?) -> Void in
+                let fetchMore = { (nextLimit: Int, nextAfter: Request.Data.Key?) -> Void in
                     _ = self.paginationRequest(
                         of: request,
                         limit: nextLimit,

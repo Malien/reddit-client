@@ -27,8 +27,8 @@ final class ApplicationServices {
         }
     }
     
-    let store: ApplicationStore
-    let reddit: RedditRepository
+    var store: ApplicationStore
+    var reddit: RedditRepository
     
     init(store: ApplicationStore = ApplicationStore()) {
         self.store = store
