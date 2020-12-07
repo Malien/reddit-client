@@ -32,7 +32,7 @@ final class PostListViewController: UITableViewController {
         }
     }
     
-    private func onData(ofBookmarkedPostWithID id: PostID, bookmarked: Bool) {
+    private func onData(ofBookmarkedPostWithID id: Post.ID, bookmarked: Bool) {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             let idx = self.posts?.items.firstIndex { $0.id == id }

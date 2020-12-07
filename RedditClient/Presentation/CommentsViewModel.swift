@@ -22,7 +22,7 @@ class CommentsViewModelImpl: CommentsViewModel {
     private var sub: Cancellable!
     let batchSize: Int
     
-    init(for postID: PostID, batchSize: Int) {
+    init(for postID: Post.ID, batchSize: Int) {
         self.batchSize = batchSize
         sub = ApplicationServices.shared.reddit.comments(for: postID, limit: batchSize, force: true) { result in
             switch result {

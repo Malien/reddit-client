@@ -20,6 +20,6 @@ protocol RedditEntity where Self: Codable {
     static var kind: String { get }
 }
 
-extension RedditEntity where Self: Keyable {
-    var fullname: String { "\(Self.kind)_\(key)" }
+extension RedditEntity where Self: Identifiable {
+    var fullname: String { "\(Self.kind)_\(id)" }
 }

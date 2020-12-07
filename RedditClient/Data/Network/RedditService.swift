@@ -23,21 +23,21 @@ struct RedditService {
     private func paginationRequest<Request : RequestContainer>(
         of request: Request,
         limit: Int?,
-        after: Request.Data.Key?,
+        after: Request.Data.ID?,
         cachePath: WritableKeyPath<ApplicationStore, Cache<Request, PaginationContainer<Request.Data>>>,
-        entityCachePath: WritableKeyPath<ApplicationStore, Cache<Request.Data.Key, Request.Data>>?,
+        entityCachePath: WritableKeyPath<ApplicationStore, Cache<Request.Data.ID, Request.Data>>?,
         onError: @escaping (RedditAPI.Error) -> Void,
         fetch: @escaping (
             Request,
             Int?,
-            Request.Data.Key?,
+            Request.Data.ID?,
             @escaping (Result<RedditAPI.Listing<Request.Data>, RedditAPI.Error>) -> Void
         ) -> Cancellable
     ) -> Cancellable {
         // TODO: Figure out how to cancel all of these requests
         let cancellation = fetch(request, limit, after) { response in
             Self.handleError(response, onError: onError) { listing in
-                let fetchMore = { (nextLimit: Int, nextAfter: Request.Data.Key?) -> Void in
+                let fetchMore = { (nextLimit: Int, nextAfter: Request.Data.ID?) -> Void in
                     _ = self.paginationRequest(
                         of: request,
                         limit: nextLimit,
@@ -51,7 +51,7 @@ struct RedditService {
                 if let entityCachePath = entityCachePath {
                     var entityCache = self.store[keyPath: entityCachePath]
                     for item in listing.children {
-                        entityCache[item.inner.key] = item.inner
+                        entityCache[item.inner.id] = item.inner
                     }
                 }
                 var cache = self.store[keyPath: cachePath]
@@ -78,7 +78,7 @@ struct RedditService {
     func fetchTopPosts(
         request: TopPostsRequest,
         limit: Int? = nil,
-        after: PostID? = nil,
+        after: Post.ID? = nil,
         onError: @escaping (RedditAPI.Error) -> Void
     ) -> Cancellable {
         paginationRequest(
@@ -93,7 +93,7 @@ struct RedditService {
     
     // TODO: maybe add pagination to this request
     func fetchPosts(
-        withIDs ids: [PostID],
+        withIDs ids: [Post.ID],
         onError: @escaping (RedditAPI.Error) -> Void
     ) -> Cancellable {
         api.posts(withIDs: ids) { response in
@@ -106,7 +106,7 @@ struct RedditService {
     }
     
     func fetchPost(
-        withID id: PostID,
+        withID id: Post.ID,
         onError: @escaping (RedditAPI.Error) -> Void
     ) -> Cancellable {
         api.post(withID: id) { response in
@@ -119,7 +119,7 @@ struct RedditService {
     func fetchComments(
         request: CommentsRequest,
         limit: Int? = nil,
-        after: CommentID? = nil,
+        after: Comment.ID? = nil,
         onError: @escaping (RedditAPI.Error) -> Void
     ) -> Cancellable {
         paginationRequest(

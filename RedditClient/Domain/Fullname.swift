@@ -8,11 +8,11 @@
 
 import Foundation
 
-struct Fullname<Entity> where Entity: RedditEntity, Entity: Keyable, Entity.Key: EntityIdentifier {
-    let id: Entity.Key
+struct Fullname<Entity> where Entity: RedditEntity, Entity: Identifiable, Entity.ID: EntityIdentifier {
+    let id: Entity.ID
 }
 
-extension Fullname: Encodable, Decodable where Entity.Key: Codable {
+extension Fullname: Encodable, Decodable where Entity.ID: Codable {
     func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         try container.encode(description)
@@ -26,7 +26,7 @@ extension Fullname: Encodable, Decodable where Entity.Key: Codable {
             throw DecodingError.dataCorruptedError(in: container, debugDescription: "Expected fullname proprty to be of kind \(Entity.kind)_<id>, got \(name)")
         }
         let kind = components[0]
-        self.id = Entity.Key.init(string: components[1])
+        self.id = Entity.ID.init(string: components[1])
         if kind != Entity.kind {
             throw DecodingError.dataCorruptedError(in: container, debugDescription: "Expected kind to be \(Entity.kind), got \(kind) in \(name)")
         }

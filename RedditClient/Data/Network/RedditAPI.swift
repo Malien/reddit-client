@@ -9,8 +9,8 @@ extension URL {
     }
 }
 
-extension RedditEntity where Self: Keyable, Self.Key: EntityIdentifier, Self.Key.Entity == Self {
-    static func paginate(components: inout URLComponents, limit: Int?, after: Key?) {
+extension RedditEntity where Self: Identifiable, Self.ID: EntityIdentifier, Self.ID.Entity == Self {
+    static func paginate(components: inout URLComponents, limit: Int?, after: ID?) {
         var queryItems: [URLQueryItem] = []
         if let limit = limit {
             queryItems.append(URLQueryItem(name: "limit", value: limit.description))
@@ -243,7 +243,7 @@ struct RedditAPI {
     ///         with `Result.failure(RedditAPI.Error.invalidURL)` and fetch iteself will return `nil`
     @discardableResult
     public func topPosts(
-        from subreddit: Subreddit, limit: Int? = nil, after: PostID? = nil,
+        from subreddit: Subreddit, limit: Int? = nil, after: Post.ID? = nil,
         completionHandler: @escaping (Result<Listing<Post>, Error>) -> Void
     ) -> Cancellable {
         var components = URLComponents()
@@ -265,7 +265,7 @@ struct RedditAPI {
     /// - Note: If provided url component will result in invalid url, `completionHandler` will be called synchronously
     ///         with `Result.failure(RedditAPI.Error.invalidURL)` and fetch iteself will return `nil`
     @discardableResult
-    public func post(withID id: PostID, completionHandler: @escaping (Result<Post, Error>) -> Void) -> Cancellable {
+    public func post(withID id: Post.ID, completionHandler: @escaping (Result<Post, Error>) -> Void) -> Cancellable {
         var components = URLComponents()
         components.path = "/by_id/\(id.fullname).json"
         
@@ -294,9 +294,9 @@ struct RedditAPI {
     ///         with `Result.failure(RedditAPI.Error.invalidURL)` and fetch iteself will return `nil`
     @discardableResult
     public func posts(
-        withIDs ids: [PostID],
+        withIDs ids: [Post.ID],
         limit: Int? = nil,
-        after: PostID? = nil,
+        after: Post.ID? = nil,
         completionHandler: @escaping (Result<Listing<Post>, Error>) -> Void
     ) -> Cancellable {
         var components = URLComponents()
@@ -322,9 +322,9 @@ struct RedditAPI {
     ///         with `Result.failure(RedditAPI.Error.invalidURL)` and fetch iteself will return `nil`
     @discardableResult
     public func comments(
-        for postID: PostID,
+        for postID: Post.ID,
         limit: Int? = nil,
-        after: CommentID? = nil,
+        after: Comment.ID? = nil,
         completionHandler: @escaping (Result<Listing<Comment>, Error>) -> Void
     ) -> Cancellable {
         var components = URLComponents()

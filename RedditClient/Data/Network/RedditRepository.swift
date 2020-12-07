@@ -92,11 +92,11 @@ class RedditRepository {
     private func paginatedRequest<Request: RequestContainer>(
         request: Request,
         limit: Int,
-        after: Request.Data.Key?,
+        after: Request.Data.ID?,
         force: Bool,
         dataStream: @escaping(Result<PaginationContainer<Request.Data>, RedditAPI.Error>) -> Void,
         cachePath: WritableKeyPath<ApplicationStore, Cache<Request, PaginationContainer<Request.Data>>>,
-        fetch: (Request, Int?, Request.Data.Key?, @escaping (RedditAPI.Error) -> Void) -> Cancellable
+        fetch: (Request, Int?, Request.Data.ID?, @escaping (RedditAPI.Error) -> Void) -> Cancellable
     ) -> Cancellable {
         self.request(
             request: request,
@@ -112,7 +112,7 @@ class RedditRepository {
     func topPosts(
         from subreddit: Subreddit,
         limit: Int,
-        after: PostID? = nil,
+        after: Post.ID? = nil,
         force: Bool = false,
         dataStream: @escaping (Result<PaginationContainer<Post>, RedditAPI.Error>) -> Void
     ) -> Cancellable {
@@ -128,9 +128,9 @@ class RedditRepository {
     }
     
     func comments(
-        for postID: PostID,
+        for postID: Post.ID,
         limit: Int,
-        after: CommentID? = nil,
+        after: Comment.ID? = nil,
         force: Bool = false,
         dataStream: @escaping (Result<PaginationContainer<Comment>, RedditAPI.Error>) -> Void
     ) -> Cancellable {
@@ -146,7 +146,7 @@ class RedditRepository {
     }
 
     func post(
-        withID id: PostID,
+        withID id: Post.ID,
         force: Bool = false,
         dataStream: @escaping (Result<Post, RedditAPI.Error>) -> Void
     ) -> Cancellable {

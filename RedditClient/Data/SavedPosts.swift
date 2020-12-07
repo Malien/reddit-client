@@ -10,7 +10,7 @@ import Foundation
 
 struct SavedPosts {
     private(set) var posts: [Post] = []
-    private var ids: Set<PostID> = []
+    private var ids: Set<Post.ID> = []
     
     enum EventType {
         case added
@@ -28,7 +28,7 @@ struct SavedPosts {
         eventEmitter.emit(event: (post, .added))
     }
     
-    private mutating func remove(existingPostWithID id: PostID) {
+    private mutating func remove(existingPostWithID id: Post.ID) {
         ids.remove(id)
         let idx = posts.firstIndex { $0.id == id }
         if let idx = idx {
@@ -43,7 +43,7 @@ struct SavedPosts {
         }
     }
     
-    mutating func remove(postWithID id: PostID) {
+    mutating func remove(postWithID id: Post.ID) {
         if ids.contains(id) {
             remove(existingPostWithID: id)
         }
@@ -57,7 +57,7 @@ struct SavedPosts {
         }
     }
     
-    func contains(postWithID id: PostID) -> Bool {
+    func contains(postWithID id: Post.ID) -> Bool {
         ids.contains(id)
     }
     
@@ -69,7 +69,7 @@ struct SavedPosts {
         eventEmitter.unsubscribe(subscription)
     }
     
-    mutating func update(postWithID id: PostID, to post: Post) {
+    mutating func update(postWithID id: Post.ID, to post: Post) {
         if ids.contains(id) {
             if let idx = posts.firstIndex(where: { $0.id == id }) {
                 posts[idx] = post

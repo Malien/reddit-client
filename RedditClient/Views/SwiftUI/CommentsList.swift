@@ -11,17 +11,12 @@ import SwiftUI
 struct CommentsList<ViewModel: CommentsViewModel>: View {
     @ObservedObject var viewModel: ViewModel
     var body: some View {
-        List {
-            Text("No fancy application background for you! At least in dark mode. I'm too lazy to upgrade to Xcode 12 and use LazyVStack (no pun intended). SwiftUI's List view is completely unstylable")
-                .font(.system(size: 14))
-                .foregroundColor(Color(UIColor.subtext))
+        LazyVStack {
             ForEach(viewModel.comments.indices, id: \.self) { idx in
-                NavigationLink(
+                ListLink(
                     destination: CommentDetailView(comment: self.viewModel.comments[idx])
-                ) {
-                    CommentView(comment: self.viewModel.comments[idx])
-                }
-//                .onAppear {
+                ) { CommentView(comment: self.viewModel.comments[idx]) }
+//                .onAppear jjjjV
 //                    if idx >= self.viewModel.comments.endIndex - 1 {
 //                        print("Sup")
 //                        self.viewModel.fetchMore()
@@ -29,6 +24,7 @@ struct CommentsList<ViewModel: CommentsViewModel>: View {
 //                }
             }
         }
+        .background(Color(UIColor.background))
     }
 }
 
@@ -40,6 +36,7 @@ struct CommentsList_Previews: PreviewProvider {
     
     static var previews: some View {
         CommentsList(viewModel: DummyCommentsViewModel())
+            .previewLayout(.sizeThatFits)
             .previewDisplayName("Comment list")
     }
 }

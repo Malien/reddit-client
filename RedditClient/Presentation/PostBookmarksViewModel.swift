@@ -36,7 +36,7 @@ final class PostBookmarksViewModel {
     }
     private var filteredPosts: [Post] = []
     
-    init(onBookmarked: @escaping (PostID, Bool) -> Void, onUpdate: Optional<(Post) -> Void> = nil, onSearch: Optional<() -> Void> = nil) {
+    init(onBookmarked: @escaping (Post.ID, Bool) -> Void, onUpdate: Optional<(Post) -> Void> = nil, onSearch: Optional<() -> Void> = nil) {
         self.handleSearch = onSearch
         bookmarksSub = ApplicationServices.shared.store.saved.subscribe {
             let (post, event) = $0
@@ -69,7 +69,7 @@ final class PostBookmarksViewModel {
         ApplicationServices.shared.store.saved.toggle(bookmarkOfPost: post)
     }
     
-    func isBookmarked(postWithID id: PostID) -> Bool {
+    func isBookmarked(postWithID id: Post.ID) -> Bool {
         ApplicationServices.shared.store.saved.contains(postWithID: id)
     }
     

@@ -8,11 +8,14 @@
 
 import Foundation
 
-struct Comment: RedditEntity, Identifiable, Keyable, Timestamped {
+struct Comment: RedditEntity, Identifiable, Timestamped {
     static var kind: String { "t1" }
-    var key: CommentID { id }
-    
-    let id: CommentID
+
+    struct ID: Hashable {
+        let id: String
+    }
+
+    let id: ID
     /// fullname property (a combination of `kind` and `id`, like `t1_ji8ght`)
     let name: Fullname<Comment>
     
@@ -38,6 +41,28 @@ struct Comment: RedditEntity, Identifiable, Keyable, Timestamped {
     var url: URL {
         ApplicationServices.APIBaseURL.appendingPathComponent(permalink)
     }
+}
+
+extension Comment.ID: Encodable, Decodable {
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(id)
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.id = try container.decode(String.self)
+    }
+    
+}
+
+extension Comment.ID: CustomStringConvertible {
+    var description: String { id }
+}
+
+extension Comment.ID: EntityIdentifier {
+    typealias Entity = Comment
+    init(string: String) { self.id = string }
 }
 
 extension Comment: Codable {

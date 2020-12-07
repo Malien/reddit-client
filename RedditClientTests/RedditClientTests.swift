@@ -51,7 +51,7 @@ class RedditClientTests: XCTestCase {
     }
     
     func testComments() throws {
-        reddit.service.api.comments(for: PostID(string: "jrbomi")) { result in
+        reddit.service.api.comments(for: Post.ID(string: "jrbomi")) { result in
             switch result {
             case .success(let comments):
                 XCTAssertTrue(comments.children.count > 0)
@@ -64,7 +64,7 @@ class RedditClientTests: XCTestCase {
 
     func testCommentPagination() throws {
         var fetched = false
-        var sub = reddit.comments(for: PostID(string: "jrbomi"), limit: 2) { result in
+        var sub = reddit.comments(for: Post.ID(string: "jrbomi"), limit: 2) { result in
             switch result {
             case .success(let comments):
                 if fetched {

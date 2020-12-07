@@ -4,16 +4,16 @@ import os
 final class ApplicationStore {
     // TODO: Normalize cache
     var subredditTopPosts: Cache<TopPostsRequest, PaginationContainer<Post>>
-    var posts: Cache<PostID, Post>
+    var posts: Cache<Post.ID, Post>
     var saved: SavedPosts
     var postComments: Cache<CommentsRequest, PaginationContainer<Comment>>
-    private var postsSub: Cache<PostID, Post>.SubID!
+    private var postsSub: Cache<Post.ID, Post>.SubID!
     private var savedSub: SavedPosts.SubID!
     private(set) var initiateSave: () -> Void = {}
     
     init(
         subredditTopPosts: Cache<TopPostsRequest, PaginationContainer<Post>> = Cache(),
-        posts: Cache<PostID, Post> = Cache(),
+        posts: Cache<Post.ID, Post> = Cache(),
         saved: SavedPosts = SavedPosts(),
         postComments: Cache<CommentsRequest, PaginationContainer<Comment>> = Cache()
     ) {
@@ -60,7 +60,7 @@ extension ApplicationStore: Codable {
     convenience init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let subredditTopPosts = Cache<TopPostsRequest, PaginationContainer<Post>>()
-        let posts = Cache<PostID, Post>()
+        let posts = Cache<Post.ID, Post>()
         let saved = try container.decode(SavedPosts.self, forKey: .saved)
         self.init(subredditTopPosts: subredditTopPosts, posts: posts, saved: saved)
     }

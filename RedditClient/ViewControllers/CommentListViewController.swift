@@ -12,7 +12,7 @@ import SwiftUI
 class CommentListViewController: UIHostingController<CommentsList<CommentsViewModelImpl>> {
     let viewModel: CommentsViewModelImpl
     
-    init(for postID: PostID, batchSize: Int = 10) {
+    init(for postID: Post.ID, batchSize: Int = 10) {
         self.viewModel = CommentsViewModelImpl(for: postID, batchSize: batchSize)
         super.init(rootView: CommentsList(viewModel: self.viewModel))
     }

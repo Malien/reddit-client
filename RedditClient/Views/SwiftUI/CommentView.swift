@@ -30,9 +30,10 @@ struct CommentView: View {
                 .padding(.top, 8)
             VStack(alignment: .leading) {
                 HStack {
-                    Text(comment.author ?? "promotional")
+                    Text(comment.author.map { "u/\($0)" } ?? "promotional")
                         .foregroundColor(.init(UIColor.accent))
                     Text("•")
+                        .foregroundColor(.init(UIColor.text))
                     Text(comment.userReadableTimeDiff)
                         .foregroundColor(.init(UIColor.subtext))
                 }
@@ -40,14 +41,15 @@ struct CommentView: View {
                 Text(comment.body)
                     .foregroundColor(.init(UIColor.text))
             }
+            Spacer()
         }
     }
 }
 
 struct CommentView_Previews: PreviewProvider {
     static let comment = Comment(
-        id: CommentID(string: ""),
-        name: Fullname(id: CommentID(string: "")),
+        id: Comment.ID(string: ""),
+        name: Fullname(id: Comment.ID(string: "")),
         ups: 34,
         downs: 3,
         score: 45,

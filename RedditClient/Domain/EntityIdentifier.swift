@@ -13,6 +13,6 @@ protocol EntityIdentifier {
     init(string: String)
 }
 
-extension EntityIdentifier where Entity: RedditEntity, Entity: Keyable, Entity.Key == Self {
+extension EntityIdentifier where Entity: RedditEntity, Entity: Identifiable, Entity.ID == Self {
     var fullname: Fullname<Entity> { Fullname(id: self) }
 }

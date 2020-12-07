@@ -18,7 +18,7 @@ final class Observed<T> {
     typealias EE = EventEmitter<T, Observed<T>>
     var eventEmitter: EE
     
-    var projectedValue: Self { self }
+    var projectedValue: Observed<T> { self }
     
     init(wrappedValue: T, queue: DispatchQueue) {
         self.wrappedValue = wrappedValue
