@@ -53,9 +53,7 @@ final class PostListViewController: UITableViewController {
         super.viewDidLoad()
         self.tableView.register(PostTableViewCell.self, forCellReuseIdentifier: Self.reuseIndentifier)
         
-        let bgView = UIView()
-        bgView.backgroundColor = .background
-        tableView.backgroundView = bgView
+        self.tableView.backgroundColor = .background
         self.tableView.rowHeight = UITableView.automaticDimension;
         self.tableView.estimatedRowHeight = 400;
         
@@ -101,7 +99,7 @@ final class PostListViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: Self.reuseIndentifier, for: indexPath) as! PostTableViewCell
-        
+
         let post = posts!.items[indexPath.row]
         cell.onComment = { [weak self] in
             self?.selected(commentsOfPost: post)
